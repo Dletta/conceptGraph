@@ -66,9 +66,9 @@ function Concept (label, value, quant, uuid) {
  } else if (quant) {
    this.value = undefined;
    this.quant = quant;
-   // concept quantified ->  one of four value A E1 E-set
- }
- */
+ // concept quantified ->  one of four value A E1 E-set
+}
+*/
 }
 
 function Relation (label, uuid, source, target){
@@ -80,79 +80,104 @@ function Relation (label, uuid, source, target){
 
 
 /* Local Graph Functions
- * To build a graph for queries
- * To build a graph to perform graph operations on
- */
+* To build a graph for queries
+* To build a graph to perform graph operations on
+*/
 
- function Rule () {
-   this.concept = [],
-   this.relation = [],
-   this.addC = function (item) {
-     item.uuid = uuidv4();
-     this.concept.push(item);
-     return item.uuid;
-   },
-   this.addR = function (item) {
-     item.uuid = uuidv4();
-     this.relation.push(item);
-     return item.uuid;
-   },
-   this.find = function (uuid) {
-     var i = 0;
-     var lC = this.concept.length;
-     for(i;i<lC;i++){
-       if(this.concept[i].uuid === uuid) {
-         return this.concept[i];
-       }
+function Rule (label) {
+ this.label = label;
+ this.concept = [];
+ this.relation = [];
+ this.addC = function (item) {
+   item.uuid = uuidv4();
+   this.concept.push(item);
+   return item.uuid;
+ };
+ this.addR = function (item) {
+   item.uuid = uuidv4();
+   this.relation.push(item);
+   return item.uuid;
+ };
+ this.find = function (uuid) {
+   var i = 0;
+   var lC = this.concept.length;
+   for(i;i<lC;i++){
+     if(this.concept[i].uuid === uuid) {
+       return this.concept[i];
      }
-     var y = 0;
-     var lR = this.relation.length;
-     for(y;y<lR;y++){
-       if(this.relation[y].uuid === uuid) {
-         return this.relation[y];
-       }
-     }
-
-     console.log('Error: uuid not found');
    }
- }
-
- function ruleStore (domainLabel) {
-   this.label = domainLabel;
-   this.rules = [];
-   this.find = function (label) {
-     var i = 0;
-     var l = this.rules.length;
-     for(i;i<l;i++){
-       if(this.rules[i].label === label) {
-         return this.rules[i];
-       }
+   var y = 0;
+   var lR = this.relation.length;
+   for(y;y<lR;y++){
+     if(this.relation[y].uuid === uuid) {
+       return this.relation[y];
      }
-     console.log('Error: no relation found');
    }
- }
 
- function uuidv4 () {
-   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxx'.replace(/[xy]/g, function(c) {
-     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-     return v.toString(16);
-   })
- }
+   console.log('Error: uuid not found');
+ };
+}
 
- var rStore = new ruleStore ('app');
- var add = new Rule();
- var number1 = new Concept('Number', undefined, 'A', uuidv4());
- add.addC(number1);
- var number2 = new Concept('Number', undefined, 'A', uuidv4());
- add.addC(number2);
- var sum = new Concept('Sum', undefined, undefined, uuidv4());
- add.addC(sum);
- var numberE = new Concept('Number',undefined,'E1', uuidv4());
- add.addC(numberE);
- var arg1 = new Relation('arg1', uuidv4(), number1.uuid, sum.uuid);
- add.addR(arg1);
- var arg2 = new Relation('arg2', uuidv4(), number2.uuid, sum.uuid);
- add.addR(arg2);
- var res = new Relation('res', uuidv4(), sum.uuid, numberE.uuid);
- add.addR(res);
- rStore.rules.push(add);
+function ruleStore (domainLabel) {
+ this.label = domainLabel;
+ this.rules = [];
+ this.find = function (label) {
+   var i = 0;
+   var l = this.rules.length;
+   for(i;i<l;i++){
+     if(this.rules[i].label === label) {
+       return this.rules[i];
+     }
+   }
+   console.log('Error: no relation found');
+ }
+}
+
+function uuidv4 () {
+ return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxx'.replace(/[xy]/g, function(c) {
+   var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+   return v.toString(16);
+ })
+}
+
+var rStore = new ruleStore ('app');
+
+var add = new Rule('sum');
+var number1 = new Concept('Number', undefined, 'A', uuidv4());
+add.addC(number1);
+var number2 = new Concept('Number', undefined, 'A', uuidv4());
+add.addC(number2);
+var sum = new Concept('Sum', undefined, undefined, uuidv4());
+add.addC(sum);
+var numberE = new Concept('Number',undefined,'E1', uuidv4());
+add.addC(numberE);
+var arg1 = new Relation('arg1', uuidv4(), number1.uuid, sum.uuid);
+add.addR(arg1);
+var arg2 = new Relation('arg2', uuidv4(), number2.uuid, sum.uuid);
+add.addR(arg2);
+var res = new Relation('res', uuidv4(), sum.uuid, numberE.uuid);
+add.addR(res);
+
+var manhiper = new Rule('manager');
+var manager = new Concept('Manager', undefined, 'E1', uuidv4());
+manhiper.addC(manager);
+var hire = new Concept('Hire', undefined, undefined, uuidv4());
+manhiper.addC(hire);
+var agent = new Relation('agent', uuidv4(), manager, hire);
+manhiper.addR(agent);
+var person = new Concept('Person', undefined, 'eSet', uuidv4());
+manhiper.addC(person);
+var patient = new Relation('patient', uuidv4(), hire, person);
+manhiper.addR(patient);
+
+var hireDate = new Rule('hire Date');
+var date = new Concept('Date', undefined, 'E1', uuidv4());
+hireDate.addC(date);
+hireDate.addC(hire);
+hireDate.addC(person);
+var patient1 = new Relation('patient', uuidv4(), hire, person);
+hireDate.addR(patient1);
+var at = new Relation('at', uuidv4(), hire, date);
+
+rStore.rules.push(add);
+rStore.rules.push(manhiper);
