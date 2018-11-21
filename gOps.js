@@ -98,18 +98,18 @@ function Rule (label) {
    this.relation.push(item);
    return item.uuid;
  };
- this.find = function (uuid) {
+ this.find = function (label) {
    var i = 0;
    var lC = this.concept.length;
    for(i;i<lC;i++){
-     if(this.concept[i].uuid === uuid) {
+     if(this.concept[i].label === label) {
        return this.concept[i];
      }
    }
    var y = 0;
    var lR = this.relation.length;
    for(y;y<lR;y++){
-     if(this.relation[y].uuid === uuid) {
+     if(this.relation[y].label === label) {
        return this.relation[y];
      }
    }
@@ -130,6 +130,17 @@ function ruleStore (domainLabel) {
      }
    }
    console.log('Error: no relation found');
+ };
+ this.query = function (graph) {
+   // projection from one graph to another
+   // get the list of relations in the query graph
+   var relArr = graph.relation;
+   // check each rule for relations that are the same
+   var i = 0;
+   var l = this.rules.length;
+   for(i;l;i++){
+
+   }
  }
 }
 
@@ -181,3 +192,4 @@ var at = new Relation('at', uuidv4(), hire, date);
 
 rStore.rules.push(add);
 rStore.rules.push(manhiper);
+rStore.rules.push(hireDate);
