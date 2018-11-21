@@ -133,6 +133,8 @@ function ruleStore (domainLabel) {
    // projection from one graph to another
    // get the list of relations in the query graph
    var relArr = graph.relation;
+   console.log(relArr);
+   console.log(graph);
    // check each rule for relations that are the same
    var candidate = [];
    var i = 0;
@@ -141,7 +143,10 @@ function ruleStore (domainLabel) {
    var lj = relArr.length;
    for(i;l;i++){
      for(j;lj;j++){
-       var temp = this.rules[i].find(relArr[j]);
+       var temp = this.rules[i].find(relArr[j].label);
+       console.log(this.rules[i]);
+       console.log(relArr[j].label);
+       console.log(temp);
        if(temp) {candidate.push(this.rules[i]);break;}
      }
    }
