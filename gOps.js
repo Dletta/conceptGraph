@@ -136,11 +136,24 @@ function ruleStore (domainLabel) {
    // get the list of relations in the query graph
    var relArr = graph.relation;
    // check each rule for relations that are the same
+   var candidate = [];
    var i = 0;
+   var j = 0;
    var l = this.rules.length;
+   var lj = relArr.length;
    for(i;l;i++){
-
+     for(j;lj;j++){
+       var temp = this.rules[i].find(relArr[j]);
+       if(temp) {candidate.push(this.rules[i]);break;}
+     }
    }
+   console.log(candidate);
+   // score join probability
+   // / maximal common Projection
+   // execute join
+   // execute value propagation
+   // checks per algo
+   // return answer graph
  }
 }
 
