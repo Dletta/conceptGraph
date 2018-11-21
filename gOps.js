@@ -141,8 +141,8 @@ function ruleStore (domainLabel) {
    var j = 0;
    var l = this.rules.length;
    var lj = relArr.length;
-   for(i;l;i++){
-     for(j;lj;j++){
+   for(i;i<l;i++){
+     for(j;j<lj;j++){
        var temp = this.rules[i].find(relArr[j].label);
        console.log(this.rules[i]);
        console.log(relArr[j].label);
