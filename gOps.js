@@ -113,8 +113,6 @@ function Rule (label) {
        return this.relation[y];
      }
    }
-
-   console.log('Error: uuid not found');
  };
 }
 
@@ -206,3 +204,9 @@ var at = new Relation('at', uuidv4(), hire, date);
 rStore.rules.push(add);
 rStore.rules.push(manhiper);
 rStore.rules.push(hireDate);
+
+var query = new Rule('queryGraph');
+query.addC(hire);
+query.addC(person);
+var patient2 = new Relation('patient', uuidv4(), hire, person);
+query.addR(patient2);
