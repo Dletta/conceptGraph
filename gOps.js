@@ -48,6 +48,19 @@
     }
   }
 */
+
+/*
+* Represents Concepts and values that need to be included for CG
+* to work.
+* @constructor
+* @param {string} label - label for the concept e.g. Person
+* @param {string, int, undefined} value - an actual Person, Number etc for this concept
+*  if no actual value is available pass undefined
+* @param {'A','E1','E-set'} quant - Passes a quantifier for the concept,
+*  this is to make sure the reasoner knows what to return.
+* @param {string} uuid - uuid for this concept
+*/
+
 function Concept (label, value, quant, uuid) {
   this.uuid = uuid;
   this.label = label;
@@ -71,6 +84,16 @@ function Concept (label, value, quant, uuid) {
 */
 }
 
+/*
+* Represents a concept relation e.g. agent, patient of describing how two concepts
+* connect to each other.
+* @constructor
+* @param {string} label - label for the relation
+* @param {alphanumeric} uuid - uuid for this relation
+* @param {object} source - concept from which the relation comes from
+* @param {object} target - concept to which the relation goes to
+*/
+
 function Relation (label, uuid, source, target){
   this.uuid = uuid;
   this.label = label;
@@ -78,10 +101,9 @@ function Relation (label, uuid, source, target){
   this.target = target;
 }
 
-
-/* Local Graph Functions
-* To build a graph for queries
-* To build a graph to perform graph operations on
+/*
+* Represents a rule (container for a CG)
+* @param {string} label - label for the Rule
 */
 
 function Rule (label) {
@@ -116,9 +138,18 @@ function Rule (label) {
  };
 }
 
+/*
+* Represents a store of rules for a domain
+* @constructor
+* @param {string} domainLabel - label of the domain
+*/
+
 function ruleStore (domainLabel) {
- this.label = domainLabel;
- this.rules = [];
+ this.label = domainLabel;  // label
+ this.rules = [];  // array to store rules
+ /*
+ * find a specific rule in the rule store
+ */
  this.find = function (label) {
    var i = 0;
    var l = this.rules.length;
@@ -129,6 +160,12 @@ function ruleStore (domainLabel) {
    }
    console.log('Error: no relation found');
  };
+ /*
+ * Algorithm to create an answer graph from a query and a ruleStore
+ * @param {graph/rule} graph - a well-formed CG with ? on concepts we solve for.
+ * @returns {graph} - graph, which contains an answer including additional infor-
+ *  mation that led to the results.
+ */
  this.query = function (graph) {
    // projection from one graph to another
    // get the list of relations in the query graph
@@ -160,6 +197,11 @@ function ruleStore (domainLabel) {
  }
 }
 
+/*
+* generates uuid and returns an alphanumeric string
+* @returns {string} uuid
+*/
+
 function uuidv4 () {
  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxx'.replace(/[xy]/g, function(c) {
    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -167,7 +209,22 @@ function uuidv4 () {
  })
 }
 
+/*
+* make an instance of a ruleStore and add a few rules to play with
+*/
+
 var rStore = new ruleStore ('app');
+
+/*
+*                           | Number : E1 |
+*                                  ^
+*                                  |
+*                               ( Res )
+*                                  ^
+*                                  |
+* | Number : A | -> ( arg1 ) -> | Sum | <- ( arg2 ) <- | Number : A |
+*
+*/
 
 var add = new Rule('sum');
 var number1 = new Concept('Number', undefined, 'A', uuidv4());
@@ -206,9 +263,17 @@ var patient1 = new Relation('patient', uuidv4(), hire, person);
 hireDate.addR(patient1);
 var at = new Relation('at', uuidv4(), hire, date);
 
+/* Adding rules to the store */
+
 rStore.rules.push(add);
 rStore.rules.push(manhiper);
 rStore.rules.push(hireDate);
+
+/* Create a query graph
+*  __________                   ________
+*  | Person | <- ( patient ) <- | Hire |
+*  ----------                   --------
+*/
 
 var query = new Rule('queryGraph');
 query.addC(hire);
