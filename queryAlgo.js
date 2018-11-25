@@ -77,3 +77,39 @@ issues occur for searching the schematic universe.
 prompting points (might not need this) are whenever it cannot find a join
 but a question mark remains on a quant('A')
 */
+
+
+/* Given a query graph and a set of rules, named "Schemata" in Sowa's
+*  Ontology.
+*/
+
+/*
+* Algorithm C
+* @constructor
+* @param {graph} graph - the query graph
+* @param {set of graphs} rules - the domain rules
+* @return {graph} answer - answer graph for the query from the data
+* Call method start.
+*/
+
+function algoC (graph, rules) {
+  this.q = graph;
+  this.w = graph;
+  this.rules = rules;
+  this.listj = [];
+  this.start = function() {
+    var questions = [];
+    var i = 0;
+    var l = this.w.concept.length;
+    for(i;i<l;i++){ //get concepts with question marks
+      if(this.w.concept[i].value === "?") {
+        questions.push(this.w.concept[i]);
+      }
+    }
+    if(questions.length > 0) { //if we found any questions lets start looking
+      var c = questions.shift();
+      //find a join for the concept in question
+      this.listj = this.rules.find();
+    }
+  };
+}

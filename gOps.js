@@ -277,6 +277,7 @@ rStore.rules.push(hireDate);
 
 var query = new Rule('queryGraph');
 query.addC(hire);
-query.addC(person);
+var person1 = new Concept('Person', '?', undefined, uuidv4());
+query.addC(person1);
 var patient2 = new Relation('patient', uuidv4(), hire, person);
 query.addR(patient2);
