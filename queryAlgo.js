@@ -84,6 +84,56 @@ but a question mark remains on a quant('A')
 */
 
 /*
+* Find common projection between 2 graphs;
+* @param {graph} graph1 - the one you care about
+* @param {graph} graph2 - the one you want to check out
+* @returns {graph} u - common projection, if none, returns undefined
+*/
+
+
+function projection(graph1, graph2) {
+  let v = graph1;
+  let w = graph2;
+  console.log(`Comparing ${graph1.label} and ${graph2.label}`);
+  let arr1 = graph1.concept;
+  let arr2 = graph2.concept;
+  var result = {name:graph2.label+'cP',concepts:[]}
+  for(var i = 0; i<arr1.length;i++){
+    console.log(`1looking at ${arr1[i].label}`);
+    for(var j = 0; j<arr2.length; j++) {
+      console.log(`2looking at ${arr2[j].label}`);
+      if(arr1[i].label === arr2[j].label){
+        result.concepts.push(arr2[j]);
+      }
+    }
+  }
+  if(result.concepts.length > 0) { //found something
+    return result;
+  } else { //nothing
+    result = undefined;
+    return result;
+  }
+}
+
+/*
+* Sort joins preferred by score, right now it's the more matching Concepts
+* the more preferred it is for a join.
+* @param {object} common1 - the one you care about
+* @param {object} common2 - the one you want to check out
+* @returns {number} - -1 to 1 depending on the length
+*/
+
+function preferred (common1, common2) {
+  if(common1.concepts.length > common2.concepts.length) {
+    return -1; //common1 needs to be ahead
+  } else if (common1.concepts.length < common2.concepts.length) {
+    return 1; //common2 needs to be ahead
+  } else {
+    return 0; //both the same, leave in order
+  }
+}
+
+/*
 * Algorithm C
 * @constructor
 * @param {graph} graph - the query graph
@@ -95,7 +145,7 @@ but a question mark remains on a quant('A')
 function algoC (graph, rules) {
   this.q = graph;
   this.w = graph;
-  this.rules = rules;
+  this.rules = rules.rules;
   this.listj = [];
   this.start = function() {
     var questions = [];
@@ -106,10 +156,17 @@ function algoC (graph, rules) {
         questions.push(this.w.concept[i]);
       }
     }
-    if(questions.length > 0) { //if we found any questions lets start looking
-      var c = questions.shift();
-      //find a join for the concept in question
-      this.listj = this.rules.find();
+    if(questions.length <= 0){ console.error('no questions defined');return; } // No questions asked
+    //find common projections in the rules store
+    for(var i =0; i<this.rules.length; i++) {
+      let temp = projection(this.q,this.rules[i]); //temp = set of common projections
+      console.log('found:'+temp);
+      if(temp != undefined) { //if not undefined
+        this.listj.push(temp)
+      }
     }
+    this.listj.sort(preferred) //sort by preferred rule
+    console.log(this.listj);
+    //perform first join, then try to answer question mark.
   };
 }

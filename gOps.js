@@ -270,9 +270,9 @@ rStore.rules.push(manhiper);
 rStore.rules.push(hireDate);
 
 /* Create a query graph
-*  __________                   ________
-*  | Person | <- ( patient ) <- | Hire |
-*  ----------                   --------
+*
+*  | Person:? | <- ( patient ) <- | Hire | <- ( agent ) <- | Manager:Jake |
+*
 */
 
 var query = new Rule('queryGraph');
@@ -281,3 +281,7 @@ var person1 = new Concept('Person', '?', undefined, uuidv4());
 query.addC(person1);
 var patient2 = new Relation('patient', uuidv4(), hire, person);
 query.addR(patient2);
+var manager1 = new Concept('Manager', 'Jake', undefined, uuidv4());
+query.addC(manager1);
+var agent1 = new Relation('agent', uuidv4(), hire, manager);
+query.addR(agent1);
