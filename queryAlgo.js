@@ -159,7 +159,7 @@ function algoC (graph, rules) {
     if(questions.length <= 0){ console.error('no questions defined');return; } // No questions asked
     //find common projections in the rules store
     for(var i =0; i<this.rules.length; i++) {
-      let temp = projection(this.q,this.rules[i]); //temp = set of common projections
+      let temp = projection(this.w,this.rules[i]); //temp = set of common projections
       console.log('found:'+temp);
       if(temp != undefined) { //if not undefined
         this.listj.push(temp)
@@ -168,5 +168,8 @@ function algoC (graph, rules) {
     this.listj.sort(preferred) //sort by preferred rule
     console.log(this.listj);
     //perform first join, then try to answer question mark.
+    let v = this.listj.shift();
+    join(this.w,v);
+    let ans = answer(this.w); //if 
   };
 }
