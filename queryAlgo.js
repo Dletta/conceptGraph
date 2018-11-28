@@ -79,7 +79,7 @@ but a question mark remains on a quant('A')
 */
 
 
-/* Given a query graph and a set of rules, named "Schemata" in Sowa's
+/* Given a query graph and a set of axioms, named "Schemata" in Sowa's
 *  Ontology.
 */
 
@@ -144,11 +144,11 @@ function join(graph1, graph2, join) {
     //making sure values stay in the new concept
     //loop again through
   }
-  // get function from rule/graph2 add to graph1 with label
+  // get function from axiom/graph2 add to graph1 with label
 }
 
 /*
-* Find question marks and propagate to solution, using rule functions
+* Find question marks and propagate to solution, using axiom functions
 * @param {graph} graph - graph to answer
 * @returns {boolean} - true if no more question marks, false if unresolved
 */
@@ -180,15 +180,15 @@ function preferred (common1, common2) {
 * Algorithm C
 * @constructor
 * @param {graph} graph - the query graph
-* @param {set of graphs} rules - the domain rules
+* @param {set of graphs} axioms - the domain axioms
 * @return {graph} answer - answer graph for the query from the data
 * Call method start.
 */
 
-function algoC (graph, rules) {
+function algoC (graph, axioms) {
   this.q = graph;
   this.w = graph;
-  this.rules = rules.rules;
+  this.axioms = axioms.axioms;
   this.listj = [];
   this.start = function() {
     var questions = [];
@@ -200,23 +200,23 @@ function algoC (graph, rules) {
       }
     }
     if(questions.length <= 0){ console.error('no questions defined');return; } // No questions asked
-    //find common projections in the rules store
-    for(var i =0; i<this.rules.length; i++) {
-      let temp = projection(this.w,this.rules[i]); //temp = set of common projections
+    //find common projections in the axioms store
+    for(var i =0; i<this.axioms.length; i++) {
+      let temp = projection(this.w,this.axioms[i]); //temp = set of common projections
       console.log('found:'+temp);
       if(temp != undefined) { //if not undefined
         temp.index = i;
         this.listj.push(temp)
       }
     }
-    this.listj.sort(preferred) //sort by preferred rule
+    this.listj.sort(preferred) //sort by preferred axiom
     console.log('preferred');
     console.log(this.listj);
     //perform first join, then try to answer question mark.
     let v = this.listj.shift();
     console.log(v);
     console.log(v.index);
-    join(this.w,this.rules[v.index],v);
+    join(this.w,this.axioms[v.index],v);
     let ans = answer(this.w); //if we can answer, true
     if(ans){console.log(`Answer:${JSON.stringify(this.w)}`);return;}
     this.start()
