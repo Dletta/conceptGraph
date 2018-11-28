@@ -63,8 +63,8 @@
 
 function Concept (label, value, quant, uuid) {
   this.uuid = uuid;
-  this.label = label;
-  this.value = value;
+  this.label = label; //string - only
+  this.value = value; // ints or strings
   this.quant = quant;
   /*
  if(value === undefined && quant === undefined){
@@ -102,11 +102,11 @@ function Relation (label, uuid, source, target){
 }
 
 /*
-* Represents a rule (container for a CG)
-* @param {string} label - label for the Rule
+* Represents a axiom (container for a CG)
+* @param {string} label - label for the axiom
 */
 
-function Rule (label) {
+function Axiom (label) {
  this.label = label;
  this.concept = [];
  this.relation = [];
@@ -124,8 +124,6 @@ function Rule (label) {
    var i = 0;
    var lC = this.concept.length;
    for(i;i<lC;i++){
-     console.log('comparing');
-     console.log(this.concept[i]);
      if(this.concept[i].label === label) {
        return this.concept[i];
      }
@@ -141,30 +139,30 @@ function Rule (label) {
 }
 
 /*
-* Represents a store of rules for a domain
+* Represents a store of axioms for a domain
 * @constructor
 * @param {string} domainLabel - label of the domain
 */
 
-function ruleStore (domainLabel) {
+function axiomStore (domainLabel) {
  this.label = domainLabel;  // label
- this.rules = [];  // array to store rules
+ this.axioms = [];  // array to store axioms
  /*
- * find a specific rule in the rule store
+ * find a specific axiom in the axiom store
  */
  this.find = function (label) {
    var i = 0;
-   var l = this.rules.length;
+   var l = this.axioms.length;
    for(i;i<l;i++){
-     if(this.rules[i].label === label) {
-       return this.rules[i];
+     if(this.axioms[i].label === label) {
+       return this.axioms[i];
      }
    }
    console.log('Error: no relation found');
  };
  /*
- * Algorithm to create an answer graph from a query and a ruleStore
- * @param {graph/rule} graph - a well-formed CG with ? on concepts we solve for.
+ * Algorithm to create an answer graph from a query and a axiomStore
+ * @param {graph/axiom} graph - a well-formed CG with ? on concepts we solve for.
  * @returns {graph} - graph, which contains an answer including additional infor-
  *  mation that led to the results.
  */
@@ -174,19 +172,19 @@ function ruleStore (domainLabel) {
    var relArr = graph.relation;
    console.log(relArr);
    console.log(graph);
-   // check each rule for relations that are the same
+   // check each axiom for relations that are the same
    var candidate = [];
    var i = 0;
    var j = 0;
-   var l = this.rules.length;
+   var l = this.axioms.length;
    var lj = relArr.length;
    for(j;j<lj;j++){
      for(i;i<l;i++){
-       var temp = this.rules[i].find(relArr[j].label);
-       console.log(this.rules[i]);
+       var temp = this.axioms[i].find(relArr[j].label);
+       console.log(this.axioms[i]);
        console.log(relArr[j].label);
        console.log(temp);
-       if(temp) {candidate.push(this.rules[i]);break;}
+       if(temp) {candidate.push(this.axioms[i]);break;}
      }
    }
    console.log(candidate);
@@ -212,10 +210,10 @@ function uuidv4 () {
 }
 
 /*
-* make an instance of a ruleStore and add a few rules to play with
+* make an instance of a axiomStore and add a few axioms to play with
 */
 
-var rStore = new ruleStore ('app');
+var rStore = new axiomStore ('app');
 
 /*
 *                           | Number : E1 |
@@ -228,7 +226,7 @@ var rStore = new ruleStore ('app');
 *
 */
 
-var add = new Rule('sum');
+var add = new Axiom('sum');
 var number1 = new Concept('Number', undefined, 'A', uuidv4());
 add.addC(number1);
 var number2 = new Concept('Number', undefined, 'A', uuidv4());
@@ -244,7 +242,7 @@ add.addR(arg2);
 var res = new Relation('res', uuidv4(), sum.uuid, numberE.uuid);
 add.addR(res);
 
-var manhiper = new Rule('manager');
+var manhiper = new Axiom('manager');
 var manager = new Concept('Manager', undefined, 'E1', uuidv4());
 manhiper.addC(manager);
 var hire = new Concept('Hire', undefined, undefined, uuidv4());
@@ -256,7 +254,7 @@ manhiper.addC(person);
 var patient = new Relation('patient', uuidv4(), hire, person);
 manhiper.addR(patient);
 
-var hireDate = new Rule('hire Date');
+var hireDate = new Axiom('hire Date');
 var date = new Concept('Date', undefined, 'E1', uuidv4());
 hireDate.addC(date);
 hireDate.addC(hire);
@@ -265,11 +263,11 @@ var patient1 = new Relation('patient', uuidv4(), hire, person);
 hireDate.addR(patient1);
 var at = new Relation('at', uuidv4(), hire, date);
 
-/* Adding rules to the store */
+/* Adding axioms to the store */
 
-rStore.rules.push(add);
-rStore.rules.push(manhiper);
-rStore.rules.push(hireDate);
+rStore.axioms.push(add);
+rStore.axioms.push(manhiper);
+rStore.axioms.push(hireDate);
 
 /* Create a query graph
 *
@@ -277,7 +275,7 @@ rStore.rules.push(hireDate);
 *
 */
 
-var query = new Rule('queryGraph');
+var query = new Axiom('queryGraph');
 query.addC(hire);
 var person1 = new Concept('Person', '?', undefined, uuidv4());
 query.addC(person1);
