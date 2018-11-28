@@ -124,6 +124,8 @@ function Rule (label) {
    var i = 0;
    var lC = this.concept.length;
    for(i;i<lC;i++){
+     console.log('comparing');
+     console.log(this.concept[i]);
      if(this.concept[i].label === label) {
        return this.concept[i];
      }

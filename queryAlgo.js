@@ -116,6 +116,49 @@ function projection(graph1, graph2) {
 }
 
 /*
+* Join two graphs on a common projection
+* @param {graph} graph1 - to be joined to
+* @param {graph} graph2 - to be joined from
+* @param {object} join - common join information
+* @transmutates graph 1 , so no return
+*/
+
+function join(graph1, graph2, join) {
+  console.log(`joining`);
+  console.log(graph1);
+  console.log(graph2);
+  //loop through the common join to identify the label of concept to be joined
+  let i = 0;
+  let l = join.concepts.length;
+  for(i;i<l;i++){
+    //find concept in each graph
+    console.log('looking for:'+join.concepts[i].label);
+    let concept1 = graph1.find(join.concepts[i].label)
+    let concept2 = graph2.find(join.concepts[i].label)
+    console.log('1');
+    console.log(concept1);
+    console.log('2');
+    console.log(concept2);
+    //find relation referencing uuid of concept in graph1
+    //replace concept with concept from graph2 connect relation to said concept
+    //making sure values stay in the new concept
+    //loop again through
+  }
+  // get function from rule/graph2 add to graph1 with label
+}
+
+/*
+* Find question marks and propagate to solution, using rule functions
+* @param {graph} graph - graph to answer
+* @returns {boolean} - true if no more question marks, false if unresolved
+*/
+
+function answer(graph) {
+  //execute function in graph1 if label is concept of question mark
+  return true;
+}
+
+/*
 * Sort joins preferred by score, right now it's the more matching Concepts
 * the more preferred it is for a join.
 * @param {object} common1 - the one you care about
@@ -162,14 +205,20 @@ function algoC (graph, rules) {
       let temp = projection(this.w,this.rules[i]); //temp = set of common projections
       console.log('found:'+temp);
       if(temp != undefined) { //if not undefined
+        temp.index = i;
         this.listj.push(temp)
       }
     }
     this.listj.sort(preferred) //sort by preferred rule
+    console.log('preferred');
     console.log(this.listj);
     //perform first join, then try to answer question mark.
     let v = this.listj.shift();
-    join(this.w,v);
-    let ans = answer(this.w); //if 
+    console.log(v);
+    console.log(v.index);
+    join(this.w,this.rules[v.index],v);
+    let ans = answer(this.w); //if we can answer, true
+    if(ans){console.log(`Answer:${JSON.stringify(this.w)}`);return;}
+    this.start()
   };
 }
