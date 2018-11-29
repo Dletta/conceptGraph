@@ -94,14 +94,14 @@ but a question mark remains on a quant('A')
 function projection(graph1, graph2) {
   let v = graph1;
   let w = graph2;
-  console.log(`Comparing ${graph1.label} and ${graph2.label}`);
+  //console.log(`Comparing ${graph1.label} and ${graph2.label}`);
   let arr1 = graph1.concept;
   let arr2 = graph2.concept;
   var result = {name:graph2.label+'cP',concepts:[]}
   for(var i = 0; i<arr1.length;i++){
-    console.log(`1looking at ${arr1[i].label}`);
+    //console.log(`1looking at ${arr1[i].label}`);
     for(var j = 0; j<arr2.length; j++) {
-      console.log(`2looking at ${arr2[j].label}`);
+      //console.log(`2looking at ${arr2[j].label}`);
       if(arr1[i].label === arr2[j].label){
         result.concepts.push(arr2[j]);
       }
@@ -140,6 +140,7 @@ function join(graph1, graph2, join) {
     console.log('2');
     console.log(concept2);
     //find relation referencing uuid of concept in graph1
+
     //replace concept with concept from graph2 connect relation to said concept
     //making sure values stay in the new concept
     //loop again through
@@ -218,7 +219,15 @@ function algoC (graph, axioms) {
     console.log(v.index);
     join(this.w,this.axioms[v.index],v);
     let ans = answer(this.w); //if we can answer, true
-    if(ans){console.log(`Answer:${JSON.stringify(this.w)}`);return;}
+    if(ans){console.log(this.w);return;}
     this.start()
   };
 }
+
+
+/*
+* Execute test
+*/
+
+var temp = new algoC (query, rStore);
+temp.start()

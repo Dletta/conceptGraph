@@ -285,3 +285,7 @@ var manager1 = new Concept('Manager', 'Jake', undefined, uuidv4());
 query.addC(manager1);
 var agent1 = new Relation('agent', uuidv4(), hire, manager);
 query.addR(agent1);
+var date1 = new Concept('Date', '?', undefined, uuidv4());
+query.addC(date1);
+var at = new Relation('at', uuidv4(), hire, date1);
+query.addR(at);
