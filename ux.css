@@ -15,14 +15,16 @@ body {
 .axiom {
   border: 1px solid black;
   font-weight: bold;
-  color: white;
+  color: lightgreen;
 }
 
 .concept {
   max-width: 300px;
   border: 1px solid grey;
-  color: white;
+  color: darkblue;
 }
+
+
 
 input {
   background-color: rgb(100,100,100);

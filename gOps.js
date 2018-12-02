@@ -298,7 +298,7 @@ function render(axiom, contId) {
     div1.appendChild(text);
     div1.appendChild(text);
     div1.setAttribute('name',axiom.relation[i].label);
-    div1.setAttribute('class','concept');
+    div1.setAttribute('class','relation');
     div.appendChild(div1);
   }
 
