@@ -226,11 +226,11 @@ var query = new Axiom('queryGraph');
 query.addC(hire);
 var person1 = new Concept('Person', '?', uuidv4());
 query.addC(person1);
-var patient2 = new Relation('patient', uuidv4(), hire, person);
+var patient2 = new Relation('patient', uuidv4(), hire, person1);
 query.addR(patient2);
 var manager1 = new Concept('Manager', 'Jake', uuidv4());
 query.addC(manager1);
-var agent1 = new Relation('agent', uuidv4(), hire, manager);
+var agent1 = new Relation('agent', uuidv4(), hire, manager1);
 query.addR(agent1);
 var date1 = new Concept('Date', '?', uuidv4());
 query.addC(date1);
@@ -450,7 +450,7 @@ function render(axiom, contId) {
 
     div1.setAttribute('name',axiom.relation[i].label);
     div1.setAttribute('class','relation');
-    
+
     div.appendChild(div1);
   }
 
