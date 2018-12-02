@@ -417,21 +417,40 @@ function render(axiom, contId) {
     var div1 = document.createElement('div');
     var text = document.createTextNode('label: ' + axiom.relation[i].label);
     div1.appendChild(text);
+
     var br = document.createElement('br');
     div1.appendChild(br);
+
     var text = document.createTextNode('uuid: ' + axiom.relation[i].uuid);
     div1.appendChild(text);
+
     var br = document.createElement('br');
     div1.appendChild(br);
-    var text = document.createTextNode('source: '+ axiom.relation[i].source.uuid);
+
+    var text = document.createTextNode('source: ');
     div1.appendChild(text);
+
     var br = document.createElement('br');
     div1.appendChild(br);
-    var text = document.createTextNode('target: '+ axiom.relation[i].target.uuid);
+
+    var text = document.createTextNode(axiom.relation[i].source.uuid);
     div1.appendChild(text);
+
+    var br = document.createElement('br');
+    div1.appendChild(br);
+
+    var text = document.createTextNode('target: ');
     div1.appendChild(text);
+
+    var br = document.createElement('br');
+    div1.appendChild(br);
+
+    var text = document.createTextNode(axiom.relation[i].target.uuid);
+    div1.appendChild(text);
+
     div1.setAttribute('name',axiom.relation[i].label);
     div1.setAttribute('class','relation');
+    
     div.appendChild(div1);
   }
 
