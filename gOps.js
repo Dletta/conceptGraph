@@ -278,5 +278,29 @@ function render(axiom, contId) {
     div.appendChild(div1);
   }
 
+  var i = 0;
+  var l = axiom.relation.length;
+  for (i;i<l;i++) {
+    var div1 = document.createElement('div');
+    var text = document.createTextNode('label: ' + axiom.relation[i].label);
+    div1.appendChild(text);
+    var br = document.createElement('br');
+    div1.appendChild(br);
+    var text = document.createTextNode('uuid: ' + axiom.relation[i].uuid);
+    div1.appendChild(text);
+    var br = document.createElement('br');
+    div1.appendChild(br);
+    var text = document.createTextNode('source: '+ axiom.relation[i].source);
+    div1.appendChild(text);
+    var br = document.createElement('br');
+    div1.appendChild(br);
+    var text = document.createTextNode('target: '+ axiom.relation[i].target);
+    div1.appendChild(text);
+    div1.appendChild(text);
+    div1.setAttribute('name',axiom.relation[i].label);
+    div1.setAttribute('class','concept');
+    div.appendChild(div1);
+  }
+
   container.appendChild(div);
 }
