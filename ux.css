@@ -12,6 +12,18 @@ body {
   border-right: 1px solid rgb(200,200,200);
 }
 
+.axiom {
+  border: 1px solid black;
+  font-weight: bold;
+  color: white;
+}
+
+.concept {
+  max-width: 300px;
+  border: 1px solid grey;
+  color: white;
+}
+
 input {
   background-color: rgb(100,100,100);
   color: rgb(250,250,250);

@@ -55,33 +55,15 @@
 * @constructor
 * @param {string} label - label for the concept e.g. Person
 * @param {string, int, undefined} value - an actual Person, Number etc for this concept
-*  if no actual value is available pass undefined
-* @param {'A','E1','E-set'} quant - Passes a quantifier for the concept,
-*  this is to make sure the reasoner knows what to return.
+*  if no actual value is available pass undefined or a quantifier '*', '@'
 * @param {string} uuid - uuid for this concept
 */
 
-function Concept (label, value, quant, uuid) {
+function Concept (label, value, uuid) {
   this.uuid = uuid;
   this.label = label; //string - only
   this.value = value; // ints or strings
-  this.quant = quant;
-  /*
- if(value === undefined && quant === undefined){
-   this.value = undefined;
-   this.quant = undefined;
-   // concept indefinite -> selector
- } else if (value) {
-   this.value = value;
-   this.quant = undefined;
-   // concept constant -> a defined thing
-   function permissible to check  if value is permissible on a given sort label
- } else if (quant) {
-   this.value = undefined;
-   this.quant = quant;
- // concept quantified ->  one of four value A E1 E-set
-}
-*/
+  this.link;
 }
 
 /*
@@ -103,35 +85,36 @@ function Relation (label, uuid, source, target){
 
 /*
 * Represents a axiom (container for a CG)
-* @param {string} label - label for the axiom
+* @constructor
+* @param {string} label - label for the axiom - Capitalize
+* @param {path} access - path in db to this concept e.g. app.get('person')
 */
 
-function Axiom (label) {
+function Axiom (label, access) {
  this.label = label;
+ this.access = access;
  this.concept = [];
  this.relation = [];
  this.addC = function (item) {
-   item.uuid = uuidv4();
    this.concept.push(item);
    return item.uuid;
  };
  this.addR = function (item) {
-   item.uuid = uuidv4();
    this.relation.push(item);
    return item.uuid;
  };
- this.find = function (label) {
+ this.find = function (prop, item) {
    var i = 0;
    var lC = this.concept.length;
    for(i;i<lC;i++){
-     if(this.concept[i].label === label) {
+     if(this.concept[i][prop] === item) {
        return this.concept[i];
      }
    }
    var y = 0;
    var lR = this.relation.length;
    for(y;y<lR;y++){
-     if(this.relation[y].label === label) {
+     if(this.relation[y][prop] === item) {
        return this.relation[y];
      }
    }
@@ -160,43 +143,7 @@ function axiomStore (domainLabel) {
    }
    console.log('Error: no relation found');
  };
- /*
- * Algorithm to create an answer graph from a query and a axiomStore
- * @param {graph/axiom} graph - a well-formed CG with ? on concepts we solve for.
- * @returns {graph} - graph, which contains an answer including additional infor-
- *  mation that led to the results.
- */
- this.query = function (graph) {
-   // projection from one graph to another
-   // get the list of relations in the query graph
-   var relArr = graph.relation;
-   console.log(relArr);
-   console.log(graph);
-   // check each axiom for relations that are the same
-   var candidate = [];
-   var i = 0;
-   var j = 0;
-   var l = this.axioms.length;
-   var lj = relArr.length;
-   for(j;j<lj;j++){
-     for(i;i<l;i++){
-       var temp = this.axioms[i].find(relArr[j].label);
-       console.log(this.axioms[i]);
-       console.log(relArr[j].label);
-       console.log(temp);
-       if(temp) {candidate.push(this.axioms[i]);break;}
-     }
-   }
-   console.log(candidate);
-   // score join probability
-   // / maximal common Projection
-   // execute join
-   // execute value propagation
-   // checks per algo
-   // return answer graph
- }
 }
-
 /*
 * generates uuid and returns an alphanumeric string
 * @returns {string} uuid
@@ -213,7 +160,7 @@ function uuidv4 () {
 * make an instance of a axiomStore and add a few axioms to play with
 */
 
-var rStore = new axiomStore ('app');
+var aStore = new axiomStore ('app');
 
 /*
 *                           | Number : E1 |
@@ -226,14 +173,14 @@ var rStore = new axiomStore ('app');
 *
 */
 
-var add = new Axiom('sum');
-var number1 = new Concept('Number', undefined, 'A', uuidv4());
+var add = new Axiom('Sum Axiom');
+var number1 = new Concept('Number', undefined, uuidv4());
 add.addC(number1);
-var number2 = new Concept('Number', undefined, 'A', uuidv4());
+var number2 = new Concept('Number', undefined, uuidv4());
 add.addC(number2);
-var sum = new Concept('Sum', undefined, undefined, uuidv4());
+var sum = new Concept('Sum', undefined, uuidv4());
 add.addC(sum);
-var numberE = new Concept('Number',undefined,'E1', uuidv4());
+var numberE = new Concept('Number',undefined, uuidv4());
 add.addC(numberE);
 var arg1 = new Relation('arg1', uuidv4(), number1.uuid, sum.uuid);
 add.addR(arg1);
@@ -242,20 +189,20 @@ add.addR(arg2);
 var res = new Relation('res', uuidv4(), sum.uuid, numberE.uuid);
 add.addR(res);
 
-var manhiper = new Axiom('manager');
-var manager = new Concept('Manager', undefined, 'E1', uuidv4());
+var manhiper = new Axiom('Manager Axiom');
+var manager = new Concept('Manager', undefined, uuidv4());
 manhiper.addC(manager);
-var hire = new Concept('Hire', undefined, undefined, uuidv4());
+var hire = new Concept('Hire', undefined, uuidv4());
 manhiper.addC(hire);
 var agent = new Relation('agent', uuidv4(), manager, hire);
 manhiper.addR(agent);
-var person = new Concept('Person', undefined, 'eSet', uuidv4());
+var person = new Concept('Person', undefined, uuidv4());
 manhiper.addC(person);
 var patient = new Relation('patient', uuidv4(), hire, person);
 manhiper.addR(patient);
 
-var hireDate = new Axiom('hire Date');
-var date = new Concept('Date', undefined, 'E1', uuidv4());
+var hireDate = new Axiom('Hire Date Axiom');
+var date = new Concept('Date', undefined, uuidv4());
 hireDate.addC(date);
 hireDate.addC(hire);
 hireDate.addC(person);
@@ -265,10 +212,12 @@ var at = new Relation('at', uuidv4(), hire, date);
 
 /* Adding axioms to the store */
 
-rStore.axioms.push(add);
-rStore.axioms.push(manhiper);
-rStore.axioms.push(hireDate);
-
+aStore.axioms.push(add);
+aStore.axioms.push(manhiper);
+aStore.axioms.push(hireDate);
+render(add, 'cont')
+render(manhiper, 'cont')
+render(hireDate, 'cont')
 /* Create a query graph
 *
 *  | Person:? | <- ( patient ) <- | Hire | <- ( agent ) <- | Manager:Jake |
@@ -289,3 +238,45 @@ var date1 = new Concept('Date', '?', undefined, uuidv4());
 query.addC(date1);
 var at = new Relation('at', uuidv4(), hire, date1);
 query.addR(at);
+
+/*
+* Function that takes an axiom and creates a view from interval
+* @param {axiom} axiom - axiom to render
+* @param {uuid} contId - id of the container in the html code
+*/
+
+function render(axiom, contId) {
+  var container = document.getElementById(contId);
+  var div = document.createElement('div');
+  var text = document.createTextNode(axiom.label);
+  div.appendChild(text);
+  div.setAttribute('name',axiom.label);
+  div.setAttribute('id',axiom.label);
+  div.setAttribute('class','axiom');
+
+  var i = 0;
+  var l = axiom.concept.length;
+  for (i;i<l;i++) {
+    var div1 = document.createElement('div');
+    var text = document.createTextNode('label: ' + axiom.concept[i].label);
+    div1.appendChild(text);
+    var br = document.createElement('br');
+    div1.appendChild(br);
+    var text = document.createTextNode('uuid: ' + axiom.concept[i].uuid);
+    div1.appendChild(text);
+    var br = document.createElement('br');
+    div1.appendChild(br);
+    var text = document.createTextNode('value: '+ axiom.concept[i].value);
+    div1.appendChild(text);
+    var br = document.createElement('br');
+    div1.appendChild(br);
+    var text = document.createElement('input');
+    text.setAttribute('id','val'+axiom.concept[i].uuid)
+    div1.appendChild(text);
+    div1.setAttribute('name',axiom.concept[i].label);
+    div1.setAttribute('class','concept');
+    div.appendChild(div1);
+  }
+
+  container.appendChild(div);
+}

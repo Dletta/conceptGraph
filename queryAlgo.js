@@ -133,8 +133,8 @@ function join(graph1, graph2, join) {
   for(i;i<l;i++){
     //find concept in each graph
     console.log('looking for:'+join.concepts[i].label);
-    let concept1 = graph1.find(join.concepts[i].label)
-    let concept2 = graph2.find(join.concepts[i].label)
+    let concept1 = graph1.find('label',join.concepts[i].label)
+    let concept2 = graph2.find('label',join.concepts[i].label)
     console.log('1');
     console.log(concept1);
     console.log('2');
@@ -229,5 +229,5 @@ function algoC (graph, axioms) {
 * Execute test
 */
 
-var temp = new algoC (query, rStore);
+var temp = new algoC (query, aStore);
 temp.start()
