@@ -87,12 +87,10 @@ function Relation (label, uuid, source, target){
 * Represents a axiom (container for a CG)
 * @constructor
 * @param {string} label - label for the axiom - Capitalize
-* @param {path} access - path in db to this concept e.g. app.get('person')
 */
 
-function Axiom (label, access) {
+function Axiom (label) {
  this.label = label;
- this.access = access;
  this.concept = [];
  this.relation = [];
  this.addC = function (item) {
@@ -215,9 +213,9 @@ var at = new Relation('at', uuidv4(), hire, date);
 aStore.axioms.push(add);
 aStore.axioms.push(manhiper);
 aStore.axioms.push(hireDate);
-render(add, 'cont')
-render(manhiper, 'cont')
-render(hireDate, 'cont')
+//render(add, 'cont')
+//render(manhiper, 'cont')
+//render(hireDate, 'cont')
 /* Create a query graph
 *
 *  | Person:? | <- ( patient ) <- | Hire | <- ( agent ) <- | Manager:Jake |
@@ -238,6 +236,141 @@ var date1 = new Concept('Date', '?', undefined, uuidv4());
 query.addC(date1);
 var at = new Relation('at', uuidv4(), hire, date1);
 query.addR(at);
+
+
+/* Utility Functions for Prototype */
+
+/*
+* Create a new Axiom 'Container' in DOM
+*/
+
+function createView () {
+  var label = prompt('What is the view called? (Capitalize)');
+  var cont = document.getElementById('cont');
+  var temp = document.createElement('div');
+  temp.setAttribute('name',label);
+  var id = uuidv4();
+  temp.setAttribute('id',id);
+  temp.setAttribute('class','axiom');
+  var text = document.createTextNode(label);
+  temp.appendChild(text);
+
+  var span = document.createElement('span');
+  span.innerHTML = 'Create Concept';
+  span.setAttribute('class','button');
+  span.setAttribute('onclick','createConcept("'+id+'")');
+  temp.appendChild(span);
+
+  var span = document.createElement('span');
+  span.innerHTML = 'Create Relation';
+  span.setAttribute('class','button');
+  span.setAttribute('onclick','createRelation("'+id+'")');
+  temp.appendChild(span);
+
+  var span = document.createElement('span');
+  span.innerHTML = 'Save Axiom';
+  span.setAttribute('class','button');
+  span.setAttribute('onclick','saveAxiom("'+id+'")');
+  temp.appendChild(span);
+
+  cont.appendChild(temp);
+}
+
+/*
+* Create a new Concept in Axiom
+* @param (string) id - id of containing axiom
+*/
+
+function createConcept (contId) {
+  var label = prompt('What is this concept called?')
+  var cont = document.getElementById(contId);
+  var temp = document.createElement('div');
+  temp.setAttribute('name',label);
+  var id = uuidv4();
+  temp.setAttribute('id',id);
+  temp.setAttribute('class','concept');
+  var text = document.createTextNode('label: '+label);
+  temp.appendChild(text);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var text = document.createTextNode('uuid: '+id);
+  temp.appendChild(text);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var text = document.createTextNode('Enter Value or leave empty: ');
+  temp.appendChild(text);
+  var input = document.createElement('input');
+  temp.appendChild(input);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var text = document.createTextNode('Link: ');
+  temp.appendChild(text);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var input = document.createElement('input');
+  temp.appendChild(input);
+
+  cont.appendChild(temp);
+}
+/*
+* Create a new Relation in Axiom
+* @param (string) id - id of containing axiom
+*/
+
+function createRelation (contId) {
+  var label = prompt('What is this relation called?')
+  var cont = document.getElementById(contId);
+  var temp = document.createElement('div');
+  temp.setAttribute('name',label);
+  var id = uuidv4();
+  temp.setAttribute('id',id);
+  temp.setAttribute('class','relation');
+  var text = document.createTextNode('label: '+label);
+  temp.appendChild(text);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var text = document.createTextNode('uuid: '+id);
+  temp.appendChild(text);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var text = document.createTextNode('Source:');
+  temp.appendChild(text);
+  var input = document.createElement('input');
+  temp.appendChild(input);
+  var br = document.createElement('br');
+  temp.appendChild(br);
+  var text = document.createTextNode('Target:');
+  temp.appendChild(text);
+  var input = document.createElement('input');
+  temp.appendChild(input);
+
+  cont.appendChild(temp);
+}
+
+/*
+* Function that saves an axiom from the editor
+* @param (string) aId - id of the axiom container
+*/
+
+function saveAxiom (aId) {
+  var axiom = document.getElementById(aId);
+  var label = axiom.getAttribute('name');
+  var id = axiom.getAttribute('id');
+  var temp = new Axiom(label);
+  var cList = [];
+  var rList = [];
+
+  for (var i = 0; i < axiom.children.length; i++) {
+    if(axiom.children[i].getAttribute('class') === 'concept'){
+      cList.push(axiom.children[i]);
+    } else if (axiom.children[i].getAttribute('class') === 'relation') {
+      rList.push(axiom.children[i]);
+    }
+  }
+  console.log(cList,rList);
+  //continue going through both lists and creating objects and adding etc
+}
+
 
 /*
 * Function that takes an axiom and creates a view from interval

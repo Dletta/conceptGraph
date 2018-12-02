@@ -15,16 +15,24 @@ body {
 .axiom {
   border: 1px solid black;
   font-weight: bold;
-  color: lightgreen;
+  color: white;
+  min-height: 50px;
+  padding: 10px;
 }
 
 .concept {
   max-width: 300px;
   border: 1px solid grey;
   color: darkblue;
+  padding: 10px;
 }
 
-
+.relation {
+  max-width: 300px;
+  border: 1px solid grey;
+  color: lightgreen;
+  padding: 10px;
+}
 
 input {
   background-color: rgb(100,100,100);
