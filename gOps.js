@@ -423,11 +423,11 @@ function render(axiom, contId) {
     div1.appendChild(text);
     var br = document.createElement('br');
     div1.appendChild(br);
-    var text = document.createTextNode('source: '+ axiom.relation[i].source);
+    var text = document.createTextNode('source: '+ axiom.relation[i].source.uuid);
     div1.appendChild(text);
     var br = document.createElement('br');
     div1.appendChild(br);
-    var text = document.createTextNode('target: '+ axiom.relation[i].target);
+    var text = document.createTextNode('target: '+ axiom.relation[i].target.uuid);
     div1.appendChild(text);
     div1.appendChild(text);
     div1.setAttribute('name',axiom.relation[i].label);
