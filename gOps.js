@@ -63,7 +63,6 @@ function Concept (label, value, uuid) {
   this.uuid = uuid;
   this.label = label; //string - only
   this.value = value; // ints or strings
-  this.link;
 }
 
 /*
@@ -217,24 +216,28 @@ aStore.axioms.push(hireDate);
 //render(manhiper, 'cont')
 //render(hireDate, 'cont')
 /* Create a query graph
-*
+*                               | Date |
+*                                   |
+*                                  (at)
+*                                   |
 *  | Person:? | <- ( patient ) <- | Hire | <- ( agent ) <- | Manager:Jake |
 *
 */
 
 var query = new Axiom('queryGraph');
-query.addC(hire);
+var hire1 = new Concept('Hire', undefined, uuidv4());
+query.addC(hire1);
 var person1 = new Concept('Person', '?', uuidv4());
 query.addC(person1);
-var patient2 = new Relation('patient', uuidv4(), hire, person1);
+var patient2 = new Relation('patient', uuidv4(), hire1, person1);
 query.addR(patient2);
 var manager1 = new Concept('Manager', 'Jake', uuidv4());
 query.addC(manager1);
-var agent1 = new Relation('agent', uuidv4(), hire, manager1);
+var agent1 = new Relation('agent', uuidv4(), hire1, manager1);
 query.addR(agent1);
 var date1 = new Concept('Date', '?', uuidv4());
 query.addC(date1);
-var at = new Relation('at', uuidv4(), hire, date1);
+var at = new Relation('at', uuidv4(), hire1, date1);
 query.addR(at);
 
 

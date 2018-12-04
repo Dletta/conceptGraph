@@ -118,20 +118,21 @@ function projection(graph1, graph2) {
 
 
 /*
-* Find a Concept's uuid on a Relation
-* @param {relation} relation - 
-* @param {string} uuid - to be joined from
+* Find a Concept's uuid and overwrite with another
+* @param {relation} relation - to be searched
+* @param {string} uuid - graph1uuid
+* @param {string} uuid2 - graph2 uuid
 * @returns {concept|false}
 */
-function findUuidInRelation(relation, uuid) {
+function findUuidInRelation(relation, uuid, uuidC2) {
   var concepts = ['source','target'];
   for(var c = 0; c < concepts.length; c++) {
     var concept = relation[concepts[c]];
     if(concept.uuid === uuid) {
-      return concept;
+      concept.uuid = uuidC2; // overwrite uuid with graph2
     }
   }
-  return false;
+  return false; // if not found
 }
 
 /*
@@ -160,7 +161,7 @@ function join(graph1, graph2, join) {
     let concept2 = graph2.find('label',concept.label)
     console.log('1', concept1);
     console.log('2', concept2);
-
+    concept2.value = concept1.value;
     // "preserve graph1 values and relations, but merge graph2 concepts and functions"
     // "return all graph2 relations that were not merged - save into graph1"
     // pass in 'working graph' and receive back 'working graph joined at intersections with axiom'
@@ -170,20 +171,21 @@ function join(graph1, graph2, join) {
     // graph2 has an axiom, they have relations
 
     //find relation referencing uuid of concept in graph1
+    //and replace with uuid of graph2 concept.
+    console.log(concept1.link);
     for(var r = 0; r < graph1.relation.length; r++) {
       var relation = graph1.relation[r];
-      var conceptFound = findUuidInRelation(relation, concept1.uuid);
-      
-      console.log('CONCEPT IN RELATION:', conceptFound)
-      
+      var relationFound = findUuidInRelation(relation, concept1.uuid, concept2.uuid);
+      //now set source or target (where you found graph1) to the uuid of graph2 concept
+      console.log('CONCEPT IN RELATION:', relationFound) //logs only if not found.
     }
-
-
     //replace concept with concept from graph2 connect relation to said concept
     //making sure values stay in the new concept
     //loop again through
   }
   // get function from axiom/graph2 add to graph1 with label
+  graph1.function = graph2.function;
+  return graph1;
 }
 
 /*
@@ -261,6 +263,7 @@ function algoC (graph, axioms) {
     console.log(v);
     console.log(v.index);
     join(this.w,this.axioms[v.index],v);
+    render(this.w, 'cont')
     let ans = answer(this.w); //if we can answer, true
     if(ans){console.log(this.w, 'theanswer');return;}
     this.start()
