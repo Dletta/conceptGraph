@@ -1,3 +1,84 @@
+/*
+Theory straight from John F. Sowa's Paper titled
+ Conceptual Graphs for a Data Base Interface July 1976
+ All credit for the Theory of Conceptual Graphs goes to Sowa amongst many
+ other great minds before him, who believe in a better, more human-like
+ computer interaction. We truly stand on the shoulders of giants.
+
+
+ Answer Graph Criterias to check for
+
+ 1 - w is a well formed CG
+ 2 - w is true if the data base is correct
+ 3 - The entire query graph q is covered by a join from w
+ 4 - For every concept in q that has a value, the corresponding concept in w
+     has the same value.
+ 5 - For every concept in q that had a question mark, the corresponding
+     concept in w has a value.
+
+ Algorithm A
+
+ ' Start with the concepts on the query graph that are flagged with question
+  marks;
+  join conceptual schemata to the graph so that the flagged concepts are covered
+  by target concepts;
+  propagate the question marks backwards along the function links;
+  evaluate any functional dependencies whose source all have values;
+  repeat until the original question is answered.
+  '
+
+  Algorithm B
+
+  ' every join of a new schema to the developing answer graph must at least
+  cover one of the concepts in the original query graph'
+
+  Algorithm C
+
+  w: = q;
+  while ( there is a preferred join j with w)  // seems to imply we have a list of joins
+    do begin
+      w: = result of performing j with w; //need function to do a join, also a score function
+      while (there is a source conept a in w &&
+            a does not have a value &&
+            a does not have a question mark &&
+            the target of a has a question mark)
+        do place a question mark on a; //propagation
+      while (there is a target concept b in w &&
+             b has a question mark &&
+             all sources of b have values)
+        do get a value for b from it's access procedure (function); // reasoning
+     if (there are no question marks left in w and all of q has been covered
+         by some join)
+         then begin:
+          print answer; // result
+          stop
+          end
+    end.
+
+So as preparation of running a query through algorithm c we need to find
+possible joins and rank them per explanation in paper.
+
+ Given a set of possible joins s1 ... sn, score each graph by
+ - One point for each concept in j that is the same as in w
+ - One point per concept that is in q (original query)
+ - If a question mark in w is covered by a target in j another point
+ - If a question mark is covering a source concept subtract one point
+ - If a concept in w, with a value is covered by source in a function link
+   add a point, if it is covered by a target, reject j.
+ - each concept or relation in q that has not been covered, if j covers it
+   add a point each
+
+Also need to consider a function that can return true if something is  a subsort
+of a specific concept type.
+
+Also indices for each type of concept or target or source links, if performance
+issues occur for searching the schematic universe.
+
+prompting points (might not need this) are whenever it cannot find a join
+but a question mark remains on a quant('A')
+*/
+
+
 /* Given a query graph and a set of axioms, named "Schemata" in Sowa's
 *  Ontology.
 */
@@ -34,8 +115,27 @@ function projection(graph1, graph2) {
   }
 }
 
+
+
 /*
-* Join two graphs on a common projection
+* Find a Concept's uuid on a Relation
+* @param {relation} relation - 
+* @param {string} uuid - to be joined from
+* @returns {concept|false}
+*/
+function findUuidInRelation(relation, uuid) {
+  var concepts = ['source','target'];
+  for(var c = 0; c < concepts.length; c++) {
+    var concept = relation[concepts[c]];
+    if(concept.uuid === uuid) {
+      return concept;
+    }
+  }
+  return false;
+}
+
+/*
+* Join two graphs on a common projection.
 * @param {graph} graph1 - to be joined to
 * @param {graph} graph2 - to be joined from
 * @param {object} join - common join information
@@ -43,22 +143,41 @@ function projection(graph1, graph2) {
 */
 
 function join(graph1, graph2, join) {
+
   console.log(`joining`);
   console.log(graph1);
   console.log(graph2);
   //loop through the common join to identify the label of concept to be joined
   let i = 0;
   let l = join.concepts.length;
+  console.log('concepts:', join.concepts)
   for(i;i<l;i++){
+
+    var concept = join.concepts[i];
     //find concept in each graph
-    console.log('looking for:'+join.concepts[i].label);
-    let concept1 = graph1.find('label',join.concepts[i].label)
-    let concept2 = graph2.find('label',join.concepts[i].label)
-    console.log('1');
-    console.log(concept1);
-    console.log('2');
-    console.log(concept2);
+    console.log('looking for:'+concept.label);
+    let concept1 = graph1.find('label',concept.label)
+    let concept2 = graph2.find('label',concept.label)
+    console.log('1', concept1);
+    console.log('2', concept2);
+
+    // "preserve graph1 values and relations, but merge graph2 concepts and functions"
+    // "return all graph2 relations that were not merged - save into graph1"
+    // pass in 'working graph' and receive back 'working graph joined at intersections with axiom'
+    // relations uuid needs to move to graph2/concept that is equal to graph1/concept
+    //  ^= delete graph1/concept aftermoving the value to graph2/concept
+
+    // graph2 has an axiom, they have relations
+
     //find relation referencing uuid of concept in graph1
+    for(var r = 0; r < graph1.relation.length; r++) {
+      var relation = graph1.relation[r];
+      var conceptFound = findUuidInRelation(relation, concept1.uuid);
+      
+      console.log('CONCEPT IN RELATION:', conceptFound)
+      
+    }
+
 
     //replace concept with concept from graph2 connect relation to said concept
     //making sure values stay in the new concept
@@ -75,6 +194,11 @@ function join(graph1, graph2, join) {
 
 function answer(graph) {
   //execute function in graph1 if label is concept of question mark
+
+  // go search for a question mark
+  // is there a function in there that can give me a value for the question mark?
+  // or... if there is an input you need = go into those question marks and go through that...
+  // may need to execute algoC again to get new joins that will answer the question
   return true;
 }
 
@@ -138,7 +262,15 @@ function algoC (graph, axioms) {
     console.log(v.index);
     join(this.w,this.axioms[v.index],v);
     let ans = answer(this.w); //if we can answer, true
-    if(ans){console.log(this.w);return;}
+    if(ans){console.log(this.w, 'theanswer');return;}
     this.start()
   };
 }
+
+
+/*
+* Execute test
+*/
+
+var temp = new algoC (query, aStore);
+temp.start()

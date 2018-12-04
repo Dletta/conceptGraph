@@ -87,3 +87,11 @@ issues occur for searching the schematic universe.
 prompting points (might not need this) are whenever it cannot find a join
 but a question mark remains on a quant('A')
 
+The join function:
+
+
+>reference to concepts in common
+>loop through join, giving you the concepts you want matching
+>find concept person in graph2
+>find concept2 of join in graph1 and graph2 and merge them together
+
