@@ -185,7 +185,7 @@ function join(graph1, graph2, join) {
   }
   // get function from axiom/graph2 add to graph1 with label
   graph1.function = graph2.function;
-  return graph1;
+  return graph1; //still missing all other concepts not merged from graph 2, need to add these before returning.
 }
 
 /*
