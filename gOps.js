@@ -81,6 +81,11 @@ function Relation (label, uuid, source, target){
   this.source = source;
   this.target = target;
 }
+/* @comment for future development
+So [Person:Jake Butterfield]-(hasView)-[PersonView] where hasView is in fact a relation with function getView(Name, View)
+Assuming @param {graph} View - a view axiom. It can then retrieve data for each field in the view, by first finding Jake Butterfield's Record and then rendering the 'viewGraph' with said values
+Aaaand if no value is passed from link 1 (Person Concept) then it knows to render an empty view
+*/
 
 /*
 * Represents a axiom (container for a CG)
