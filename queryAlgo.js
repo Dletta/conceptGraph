@@ -94,6 +94,7 @@ but a question mark remains on a quant('A')
 function projection(graph1, graph2) {
   let v = graph1;
   let w = graph2;
+  let score = 0;
   //console.log(`Comparing ${graph1.label} and ${graph2.label}`);
   let arr1 = graph1.concept;
   let arr2 = graph2.concept;
@@ -103,11 +104,16 @@ function projection(graph1, graph2) {
     for(var j = 0; j<arr2.length; j++) {
       //console.log(`2looking at ${arr2[j].label}`);
       if(arr1[i].label === arr2[j].label){
+        score += 1;
         result.concepts.push(arr2[j]);
+        if(arr1[i].value === "?"){
+          score += 1;
+        }
       }
     }
   }
   if(result.concepts.length > 0) { //found something
+    result.score = score;
     return result;
   } else { //nothing
     result = undefined;
@@ -136,6 +142,40 @@ function findUuidInRelation(relation, uuid, uuidC2) {
 }
 
 /*
+* Extend graph by adding concepts and relations not found in 2nd graph
+* @param {graph} target - to be extended
+* @param {graph} source - to be taken from
+* mutate @param Target
+*/
+function extendGraph(target, source){
+  //if in graph ignore
+  //if not in graph add into graph1
+  console.log('extendingC');
+  var i = 0;
+  var l = source.concept.length;
+  for(i;i<l;i++){
+    console.log('looking');
+    console.log(source.concept[i].label);
+    console.log(target.find('label', source.concept[i].label));
+    if(!target.find('label', source.concept[i].label)){
+      target.addC(source.concept[i]);
+    }
+  }
+
+  console.log('extendingR');
+  var i = 0;
+  var l = source.relation.length;
+  for(i;i<l;i++){
+    console.log('looking');
+    console.log(source.relation[i].label);
+    console.log(target.find('label', source.relation[i].label));
+    if(!target.find('label', source.relation[i].label)){
+      target.addR(source.relation[i]);
+    }
+  }
+
+}
+/*
 * Join two graphs on a common projection.
 * @param {graph} graph1 - to be joined to
 * @param {graph} graph2 - to be joined from
@@ -159,8 +199,6 @@ function join(graph1, graph2, join) {
     console.log('looking for:'+concept.label);
     let concept1 = graph1.find('label',concept.label)
     let concept2 = graph2.find('label',concept.label)
-    console.log('1', concept1);
-    console.log('2', concept2);
     concept2.value = concept1.value;
     // "preserve graph1 values and relations, but merge graph2 concepts and functions"
     // "return all graph2 relations that were not merged - save into graph1"
@@ -172,17 +210,20 @@ function join(graph1, graph2, join) {
 
     //find relation referencing uuid of concept in graph1
     //and replace with uuid of graph2 concept.
-    console.log(concept1.link);
     for(var r = 0; r < graph1.relation.length; r++) {
       var relation = graph1.relation[r];
+            //now set source or target (where you found graph1) to the uuid of graph2 concept
       var relationFound = findUuidInRelation(relation, concept1.uuid, concept2.uuid);
-      //now set source or target (where you found graph1) to the uuid of graph2 concept
-      console.log('CONCEPT IN RELATION:', relationFound) //logs only if not found.
     }
+
+    graph1.delC(concept1.uuid); //delete not working yet
+    graph1.addC(concept2);
+
     //replace concept with concept from graph2 connect relation to said concept
     //making sure values stay in the new concept
     //loop again through
   }
+  extendGraph(graph1, graph2);
   // get function from axiom/graph2 add to graph1 with label
   graph1.function = graph2.function;
   return graph1; //still missing all other concepts not merged from graph 2, need to add these before returning.
@@ -206,16 +247,16 @@ function answer(graph) {
 
 /*
 * Sort joins preferred by score, right now it's the more matching Concepts
-* the more preferred it is for a join.
+* the more preferred it is for a join plus points for concepts with question mark
 * @param {object} common1 - the one you care about
 * @param {object} common2 - the one you want to check out
 * @returns {number} - -1 to 1 depending on the length
 */
 
 function preferred (common1, common2) {
-  if(common1.concepts.length > common2.concepts.length) {
+  if(common1.score > common2.score) {
     return -1; //common1 needs to be ahead
-  } else if (common1.concepts.length < common2.concepts.length) {
+  } else if (common1.score < common2.score) {
     return 1; //common2 needs to be ahead
   } else {
     return 0; //both the same, leave in order

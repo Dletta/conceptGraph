@@ -100,6 +100,22 @@ function Axiom (label) {
    this.relation.push(item);
    return item.uuid;
  };
+ this.delC = function (uuid) {
+   var i = 0;
+   for(i;i<this.concept.length;i++){
+     if(this.concept[i].uuid === uuid) {
+       this.concept.splice(i,1);
+     }
+   }
+ };
+ this.delR = function (uuid) {
+   var i = 0;
+   for(i;i<this.relation.length;i++){
+     if(this.relation[i].uuid === uuid) {
+       this.relation.splice(i,1);
+     }
+   }
+ };
  this.find = function (prop, item) {
    var i = 0;
    var lC = this.concept.length;
@@ -115,6 +131,7 @@ function Axiom (label) {
        return this.relation[y];
      }
    }
+   return false;
  };
 }
 
@@ -191,11 +208,11 @@ var manager = new Concept('Manager', undefined, uuidv4());
 manhiper.addC(manager);
 var hire = new Concept('Hire', undefined, uuidv4());
 manhiper.addC(hire);
-var agent = new Relation('agent', uuidv4(), manager, hire);
+var agent = new Relation('agent', uuidv4(), manager.uuid, hire.uuid);
 manhiper.addR(agent);
 var person = new Concept('Person', undefined, uuidv4());
 manhiper.addC(person);
-var patient = new Relation('patient', uuidv4(), hire, person);
+var patient = new Relation('patient', uuidv4(), hire.uuid, person.uuid);
 manhiper.addR(patient);
 
 var hireDate = new Axiom('Hire Date Axiom');
@@ -203,9 +220,13 @@ var date = new Concept('Date', undefined, uuidv4());
 hireDate.addC(date);
 hireDate.addC(hire);
 hireDate.addC(person);
-var patient1 = new Relation('patient', uuidv4(), hire, person);
+var patient1 = new Relation('patient', uuidv4(), hire.uuid, person.uuid);
 hireDate.addR(patient1);
-var at = new Relation('at', uuidv4(), hire, date);
+var at = new Relation('at', uuidv4(), hire.uuid, date.uuid);
+var day = new Concept('Day of the Week', undefined, uuidv4());
+hireDate.addC(day);
+var has = new Relation('has', uuidv4(), date.uuid, day.uuid);
+hireDate.addR(has);
 
 /* Adding axioms to the store */
 
@@ -229,15 +250,15 @@ var hire1 = new Concept('Hire', undefined, uuidv4());
 query.addC(hire1);
 var person1 = new Concept('Person', '?', uuidv4());
 query.addC(person1);
-var patient2 = new Relation('patient', uuidv4(), hire1, person1);
+var patient2 = new Relation('patient', uuidv4(), hire1.uuid, person1.uuid);
 query.addR(patient2);
 var manager1 = new Concept('Manager', 'Jake', uuidv4());
 query.addC(manager1);
-var agent1 = new Relation('agent', uuidv4(), hire1, manager1);
+var agent1 = new Relation('agent', uuidv4(), hire1.uuid, manager1.uuid);
 query.addR(agent1);
 var date1 = new Concept('Date', '?', uuidv4());
 query.addC(date1);
-var at = new Relation('at', uuidv4(), hire1, date1);
+var at = new Relation('at', uuidv4(), hire1.uuid, date1.uuid);
 query.addR(at);
 
 
@@ -436,7 +457,7 @@ function render(axiom, contId) {
     var br = document.createElement('br');
     div1.appendChild(br);
 
-    var text = document.createTextNode(axiom.relation[i].source.uuid);
+    var text = document.createTextNode(axiom.relation[i].source);
     div1.appendChild(text);
 
     var br = document.createElement('br');
@@ -448,7 +469,7 @@ function render(axiom, contId) {
     var br = document.createElement('br');
     div1.appendChild(br);
 
-    var text = document.createTextNode(axiom.relation[i].target.uuid);
+    var text = document.createTextNode(axiom.relation[i].target);
     div1.appendChild(text);
 
     div1.setAttribute('name',axiom.relation[i].label);
