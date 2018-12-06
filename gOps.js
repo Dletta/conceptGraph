@@ -106,13 +106,15 @@ function uuidv4 () {
 var aStore = new axiomStore ('app');
 
 /*
-*                           | Number : E1 |
+* 'Number1 which is arg1 of sum and Number2 which is arg2 of sum, where Sum
+* results in Number3'
+*                              [Number3]
 *                                  ^
 *                                  |
 *                               ( Res )
 *                                  ^
 *                                  |
-* | Number : A | -> ( arg1 ) -> | Sum | <- ( arg2 ) <- | Number : A |
+*       [Number1] -> ( arg1 ) -> [Sum] <- ( arg2 ) <- [Number2]
 *
 */
 
@@ -133,7 +135,7 @@ var res = new Thing('res', 'relation', uuidv4(), {source:sum.uuid,target:numberE
 add.addR(res);
 
 /*
-*
+* 'A manager is an agent of hiring the patient Person'
 * [Manager]-(agent)-[Hire]-(patient)-[Person]
 *
 */
@@ -151,6 +153,7 @@ var patient = new Thing('patient', 'relation', uuidv4(), {source:hire.uuid,targe
 manhiper.addR(patient);
 
 /*
+* 'A person who is the patient of being hired, at a certain date. Where the date has a day of the week'
 *
 * [Date]-(at)-[Hire]-(patient)-[Person]
 *   |
@@ -181,12 +184,14 @@ aStore.axioms.push(hireDate);
 //render(add, 'cont')
 //render(manhiper, 'cont')
 //render(hireDate, 'cont')
-/* Create a query graph
-*                               | Date |
+
+/*
+* Create a query graph for 'Who did Manager Jake hire and when?'
+*                               [Date:?]
 *                                   |
 *                                  (at)
 *                                   |
-*  | Person:? | <- ( patient ) <- | Hire | <- ( agent ) <- | Manager:Jake |
+*  [Person:?] <- (patient) <- [Hire] <- (agent) <- [Manager:Jake]
 *
 */
 
