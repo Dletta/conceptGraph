@@ -1,144 +1,69 @@
-/* Derived formation rules
-  1 - projection
-  2 - maximal join
-*/
-
-/* Projection
- Taking a master graph w, graph v (e.g. a query) is a projection of w when
- v can be derived from w by applying n>=0 detach ops or n>=0 restrict ops
- */
 /*
- for(each concept relation) {
-  apply detachment on relation that is not in v
- }
- return subset of w that should contain v;
-
- In Gun a projection is achieved by doing gun.get('edges').map().once
-  and only keeping the edges that are found in the query v
-
-
-  var projection = (query) {
-    this.queryG = query;
-    this.result = [];
-    this.method = function(query, result, relation, key) {
-      if(relation is found in query){
-        result.push(relation) //this results in multiple projective origins v,w
-      } else {
-        return
-      }
-    },
-    this.start {
-      gun.get('relations').map().once(this.method.bind(this, query, this.result))
-    }
-  }
-
-  var maxiJoin = (graph1, graph2) {
-    this.result = new Graph;
-    this.graphV = graph1;
-    this.graphW = graph2;
-    this.graphU = kernel(a,b,c); //u is maximal common projection;
-    this.method = function () {
-      u is max common project to kernel k if
-        no graph t is a common projection with v and w but is not identical
-        to u
-      u is a mx common projection in respect to kernel k. A maximal join of
-        v and w with repsect to k is a graph obtained by joining v and w
-        via u, where the concept b (in u) is joined to c (in w).
-        (which means the common concept of the 3 graphs are joined)
-    }
-  }
-*/
-
-/*
-* Represents Concepts and values that need to be included for CG
-* to work.
+* The term that makes up the universe
 * @constructor
-* @param {string} label - label for the concept e.g. Person
-* @param {string, int, undefined} value - an actual Person, Number etc for this concept
-*  if no actual value is available pass undefined or a quantifier '*', '@'
-* @param {string} uuid - uuid for this concept
+* @param {string} label - a string to represent the thing
+* @param {string} type - axiom, concept, relation, function?
+* @param {uuid} uuid - unique identifier
+* @param {object} arcs - objectArray of arcs in order as defined in ontology (relation)
+* @param {string, int, undefined} value - value (concept)
 */
 
-function Concept (label, value, uuid) {
-  this.uuid = uuid;
-  this.label = label; //string - only
-  this.value = value; // ints or strings
-}
-
-/*
-* Represents a concept relation e.g. agent, patient of describing how two concepts
-* connect to each other.
-* @constructor
-* @param {string} label - label for the relation
-* @param {alphanumeric} uuid - uuid for this relation
-* @param {object} source - concept from which the relation comes from
-* @param {object} target - concept to which the relation goes to
-*/
-
-function Relation (label, uuid, source, target){
-  this.uuid = uuid;
+function Thing (label, type, uuid, arcs, value) {
   this.label = label;
-  this.source = source;
-  this.target = target;
+  this.type = type;
+  this.uuid = uuid;
+  this.arcs = arcs;
+  this.value = value;
+  this.concept = []; //concept array for axioms
+  this.relation = []; //relation array for axioms
+  this.addC = function (item) {
+    this.concept.push(item);
+    return item.uuid;
+  };
+  this.addR = function (item) {
+    this.relation.push(item);
+    return item.uuid;
+  };
+  this.delC = function (uuid) {
+    var i = 0;
+    for(i;i<this.concept.length;i++){
+      if(this.concept[i].uuid === uuid) {
+        this.concept.splice(i,1);
+      }
+    }
+  };
+  this.delR = function (uuid) {
+    var i = 0;
+    for(i;i<this.relation.length;i++){
+      if(this.relation[i].uuid === uuid) {
+        this.relation.splice(i,1);
+      }
+    }
+  };
+  this.find = function (prop, item) {
+    var i = 0;
+    var lC = this.concept.length;
+    for(i;i<lC;i++){
+      if(this.concept[i][prop] === item) {
+        return this.concept[i];
+      }
+    }
+    var y = 0;
+    var lR = this.relation.length;
+    for(y;y<lR;y++){
+      if(this.relation[y][prop] === item) {
+        return this.relation[y];
+      }
+    }
+    return false;
+  };
 }
+
 /* @comment for future development
 So [Person:Jake Butterfield]-(hasView)-[PersonView] where hasView is in fact a relation with function getView(Name, View)
 Assuming @param {graph} View - a view axiom. It can then retrieve data for each field in the view, by first finding Jake Butterfield's Record and then rendering the 'viewGraph' with said values
 Aaaand if no value is passed from link 1 (Person Concept) then it knows to render an empty view
 */
-
-/*
-* Represents a axiom (container for a CG)
-* @constructor
-* @param {string} label - label for the axiom - Capitalize
-*/
-
-function Axiom (label) {
- this.label = label;
- this.concept = [];
- this.relation = [];
- this.addC = function (item) {
-   this.concept.push(item);
-   return item.uuid;
- };
- this.addR = function (item) {
-   this.relation.push(item);
-   return item.uuid;
- };
- this.delC = function (uuid) {
-   var i = 0;
-   for(i;i<this.concept.length;i++){
-     if(this.concept[i].uuid === uuid) {
-       this.concept.splice(i,1);
-     }
-   }
- };
- this.delR = function (uuid) {
-   var i = 0;
-   for(i;i<this.relation.length;i++){
-     if(this.relation[i].uuid === uuid) {
-       this.relation.splice(i,1);
-     }
-   }
- };
- this.find = function (prop, item) {
-   var i = 0;
-   var lC = this.concept.length;
-   for(i;i<lC;i++){
-     if(this.concept[i][prop] === item) {
-       return this.concept[i];
-     }
-   }
-   var y = 0;
-   var lR = this.relation.length;
-   for(y;y<lR;y++){
-     if(this.relation[y][prop] === item) {
-       return this.relation[y];
-     }
-   }
-   return false;
- };
-}
 
 /*
 * Represents a store of axioms for a domain
@@ -149,9 +74,7 @@ function Axiom (label) {
 function axiomStore (domainLabel) {
  this.label = domainLabel;  // label
  this.axioms = [];  // array to store axioms
- /*
- * find a specific axiom in the axiom store
- */
+ //this.gunPath = gun.get(label); //define base path for db
  this.find = function (label) {
    var i = 0;
    var l = this.axioms.length;
@@ -160,9 +83,10 @@ function axiomStore (domainLabel) {
        return this.axioms[i];
      }
    }
-   console.log('Error: no relation found');
+   console.log('Error: no axiom found');
  };
 }
+
 /*
 * generates uuid and returns an alphanumeric string
 * @returns {string} uuid
@@ -192,45 +116,61 @@ var aStore = new axiomStore ('app');
 *
 */
 
-var add = new Axiom('Sum Axiom');
-var number1 = new Concept('Number', undefined, uuidv4());
+var add = new Thing('Sum Axiom', 'axiom', uuidv4());
+var number1 = new Thing ('Number', 'concept', uuidv4());
 add.addC(number1);
-var number2 = new Concept('Number', undefined, uuidv4());
+var number2 = new Thing('Number', 'concept', uuidv4());
 add.addC(number2);
-var sum = new Concept('Sum', undefined, uuidv4());
+var sum = new Thing('Sum', 'concept', uuidv4());
 add.addC(sum);
-var numberE = new Concept('Number',undefined, uuidv4());
+var numberE = new Thing('Number','concept', uuidv4());
 add.addC(numberE);
-var arg1 = new Relation('arg1', uuidv4(), number1.uuid, sum.uuid);
+var arg1 = new Thing('arg1', 'relation', uuidv4(), {source:number1.uuid,target:sum.uuid});
 add.addR(arg1);
-var arg2 = new Relation('arg2', uuidv4(), number2.uuid, sum.uuid);
+var arg2 = new Thing('arg2', 'relation', uuidv4(), {source:number2.uuid,target:sum.uuid});
 add.addR(arg2);
-var res = new Relation('res', uuidv4(), sum.uuid, numberE.uuid);
+var res = new Thing('res', 'relation', uuidv4(), {source:sum.uuid,target:numberE.uuid});
 add.addR(res);
 
-var manhiper = new Axiom('Manager Axiom');
-var manager = new Concept('Manager', undefined, uuidv4());
+/*
+*
+* [Manager]-(agent)-[Hire]-(patient)-[Person]
+*
+*/
+
+var manhiper = new Thing('Manager Axiom', 'axiom', uuidv4());
+var manager = new Thing('Manager', 'concept', uuidv4());
 manhiper.addC(manager);
-var hire = new Concept('Hire', undefined, uuidv4());
+var hire = new Thing('Hire', 'concept', uuidv4());
 manhiper.addC(hire);
-var agent = new Relation('agent', uuidv4(), manager.uuid, hire.uuid);
+var agent = new Thing('agent', 'relation', uuidv4(), {source:manager.uuid,target:hire.uuid});
 manhiper.addR(agent);
-var person = new Concept('Person', undefined, uuidv4());
+var person = new Thing('Person', 'concept', uuidv4());
 manhiper.addC(person);
-var patient = new Relation('patient', uuidv4(), hire.uuid, person.uuid);
+var patient = new Thing('patient', 'relation', uuidv4(), {source:hire.uuid,target:person.uuid});
 manhiper.addR(patient);
 
-var hireDate = new Axiom('Hire Date Axiom');
-var date = new Concept('Date', undefined, uuidv4());
+/*
+*
+* [Date]-(at)-[Hire]-(patient)-[Person]
+*   |
+*  (has)
+*   |
+* [Day of the Week]
+*
+*/
+
+var hireDate = new Thing('Hire Date Axiom', 'axiom', uuidv4());
+var date = new Thing('Date', 'concept', uuidv4());
 hireDate.addC(date);
 hireDate.addC(hire);
 hireDate.addC(person);
-var patient1 = new Relation('patient', uuidv4(), hire.uuid, person.uuid);
+var patient1 = new Thing('patient', 'relation',uuidv4(), {source:hire.uuid,target:person.uuid});
 hireDate.addR(patient1);
-var at = new Relation('at', uuidv4(), hire.uuid, date.uuid);
-var day = new Concept('Day of the Week', undefined, uuidv4());
+var at = new Thing('at', 'relation', uuidv4(), {source:hire.uuid,target:date.uuid});
+var day = new Thing('Day of the Week', 'concept', uuidv4());
 hireDate.addC(day);
-var has = new Relation('has', uuidv4(), date.uuid, day.uuid);
+var has = new Thing('has', 'relation', uuidv4(), {source:date.uuid,target:day.uuid});
 hireDate.addR(has);
 
 /* Adding axioms to the store */
@@ -250,20 +190,20 @@ aStore.axioms.push(hireDate);
 *
 */
 
-var query = new Axiom('queryGraph');
-var hire1 = new Concept('Hire', undefined, uuidv4());
+var query = new Thing('queryGraph', 'axiom', uuidv4());
+var hire1 = new Thing('Hire', 'concept', uuidv4());
 query.addC(hire1);
-var person1 = new Concept('Person', '?', uuidv4());
+var person1 = new Thing('Person', 'concept', uuidv4(),{},'?');
 query.addC(person1);
-var patient2 = new Relation('patient', uuidv4(), hire1.uuid, person1.uuid);
+var patient2 = new Thing('patient', 'relation', uuidv4(), {source:hire1.uuid,target:person1.uuid});
 query.addR(patient2);
-var manager1 = new Concept('Manager', 'Jake', uuidv4());
+var manager1 = new Thing('Manager', 'concept', uuidv4(),{} ,'Jake');
 query.addC(manager1);
-var agent1 = new Relation('agent', uuidv4(), hire1.uuid, manager1.uuid);
+var agent1 = new Thing('agent', 'relation', uuidv4(), {source:hire1.uuid,target:manager1.uuid});
 query.addR(agent1);
-var date1 = new Concept('Date', '?', uuidv4());
+var date1 = new Thing('Date', 'concept', uuidv4(), {}, '?');
 query.addC(date1);
-var at = new Relation('at', uuidv4(), hire1.uuid, date1.uuid);
+var at = new Thing('at', 'relation', uuidv4(), {source:hire1.uuid,target:date1.uuid});
 query.addR(at);
 
 
@@ -385,7 +325,7 @@ function saveAxiom (aId) {
   var axiom = document.getElementById(aId);
   var label = axiom.getAttribute('name');
   var id = axiom.getAttribute('id');
-  var temp = new Axiom(label);
+  var temp = new Thing(label, 'axiom', id);
   var cList = [];
   var rList = [];
 
@@ -413,7 +353,7 @@ function render(axiom, contId) {
   var text = document.createTextNode(axiom.label);
   div.appendChild(text);
   div.setAttribute('name',axiom.label);
-  div.setAttribute('id',axiom.label);
+  div.setAttribute('id',axiom.uuid);
   div.setAttribute('class','axiom');
 
   var i = 0;
@@ -462,7 +402,7 @@ function render(axiom, contId) {
     var br = document.createElement('br');
     div1.appendChild(br);
 
-    var text = document.createTextNode(axiom.relation[i].source);
+    var text = document.createTextNode(axiom.relation[i].arcs.source);
     div1.appendChild(text);
 
     var br = document.createElement('br');
@@ -474,7 +414,7 @@ function render(axiom, contId) {
     var br = document.createElement('br');
     div1.appendChild(br);
 
-    var text = document.createTextNode(axiom.relation[i].target);
+    var text = document.createTextNode(axiom.relation[i].arcs.target);
     div1.appendChild(text);
 
     div1.setAttribute('name',axiom.relation[i].label);
