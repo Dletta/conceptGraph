@@ -3,10 +3,6 @@
 * make an instance of a axiomStore and add a few axioms to play with
 */
 
-
-
-
-
 var aStore = new axiomStore ('app');
 
 /*
