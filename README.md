@@ -89,9 +89,30 @@ but a question mark remains on a quant('A')
 
 The join function:
 
-
 >reference to concepts in common
 >loop through join, giving you the concepts you want matching
 >find concept person in graph2
 >find concept2 of join in graph1 and graph2 and merge them together
 
+
+## Language Generation & Mapping
+
+### Utterance Paths
+
+The sequence of nodes and arcs that are traversed in mapping a graph to a sentence is called the __utterance path__.
+
+### Marked Forms 
+
+
+> For emphasis,however,most languages permit optional inversions,such as the following English sentence in OSV form:
+
+> "His new-found friend he took with him to the park."
+
+> Such forms, which break the normal pattern of the language, are __marked forms__ as opposed to the normal, unemphatic, unmarked forms.
+
+- J.F. Sowa, Generating Language from Conceptual Graphs
+
+
+#### Marked Forms as HTML
+
+It is possible to now describe relations accurately 
