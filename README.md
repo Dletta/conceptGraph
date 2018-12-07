@@ -116,3 +116,30 @@ The sequence of nodes and arcs that are traversed in mapping a graph to a senten
 #### Marked Forms as HTML
 
 It is possible to now describe relations accurately 
+
+### Lexical Vector Representations from Concepts
+
+#### Descriptions:
+
+- Concept: Unit of Knowledge
+- Term: Unit of Perception (e.g.morphemes, phrases). Can be decoded into one or more Concepts.
+- Definition: Minimal, but complete explicitation of a concept. Comprises the textual explanation of the concept (sense) and its links to other concepts in a knowledge base. e.g: dictionary definition; consisting solely of a short explanation, with optional term highlights, linking to otther dictionary entries. 
+
+#### Representations:
+
+1.  Formalization of the basic unit of knowledge: the concept.
+2.  Information  extraction  from  a  linguistic  re-source into a set of concepts.
+3.  Lexical association: term ↔ concept.
+4.  Definition of a term as a composition (mix- ture)  of  concepts,  allowing  partial  or  com-plete disambiguation.
+
+A term is said ambiguous if it is composed by more than one concept.
+
+### Lexicons
+
+According to Sowa, there are three variations of factors for lexicons:
+
+- Accidental 
+- Systematic
+- Cultural
+
+Which can be expressed in __canonical graphs__.
