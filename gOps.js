@@ -354,6 +354,7 @@ function saveAxiom (aId) {
 
 function render(axiom, contId) {
   var container = document.getElementById(contId);
+  console.log(container);
   var div = document.createElement('div');
   var text = document.createTextNode(axiom.label);
   div.appendChild(text);

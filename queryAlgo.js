@@ -10,19 +10,15 @@
 * @returns {graph} u - common projection, if none, returns undefined
 */
 
-
 function projection(graph1, graph2) {
   let v = graph1;
   let w = graph2;
   let score = 0;
-  //console.log(`Comparing ${graph1.label} and ${graph2.label}`);
   let arr1 = graph1.concept;
   let arr2 = graph2.concept;
   var result = {name:graph2.label+'cP',concepts:[]}
   for(var i = 0; i<arr1.length;i++){
-    //console.log(`1looking at ${arr1[i].label}`);
     for(var j = 0; j<arr2.length; j++) {
-      //console.log(`2looking at ${arr2[j].label}`);
       if(arr1[i].label === arr2[j].label){
         score += 1;
         result.concepts.push(arr2[j]);
@@ -51,11 +47,12 @@ function projection(graph1, graph2) {
 * @returns {concept|false}
 */
 function findUuidInRelation(relation, uuid, uuidC2) {
-  var concepts = Object.keys(relation);
-  for(var c = 0; c < concepts.length; c++) {
-    var concept = relation[concepts[c]];//returns uuid
-    if(concept === uuid) {
-      concept = uuidC2; // overwrite uuid with graph2
+  var arcs = Object.keys(relation.arcs);
+  for(var c = 0; c < arcs.length; c++) {
+    var label = arcs[c]
+    var arc = relation.arcs[label];//returns uuid
+    if(arc === uuid) {
+      relation.arcs[label] = uuidC2; // overwrite uuid with graph2
     }
   }
   return false; // if not found
@@ -70,25 +67,17 @@ function findUuidInRelation(relation, uuid, uuidC2) {
 function extendGraph(target, source){
   //if in graph ignore
   //if not in graph add into graph1
-  console.log('extendingC');
   var i = 0;
   var l = source.concept.length;
   for(i;i<l;i++){
-    console.log('looking');
-    console.log(source.concept[i].label);
-    console.log(target.find('label', source.concept[i].label));
     if(!target.find('label', source.concept[i].label)){
       target.addC(source.concept[i]);
     }
   }
 
-  console.log('extendingR');
   var i = 0;
   var l = source.relation.length;
   for(i;i<l;i++){
-    console.log('looking');
-    console.log(source.relation[i].label);
-    console.log(target.find('label', source.relation[i].label));
     if(!target.find('label', source.relation[i].label)){
       target.addR(source.relation[i]);
     }
@@ -111,12 +100,10 @@ function join(graph1, graph2, join) {
   //loop through the common join to identify the label of concept to be joined
   let i = 0;
   let l = join.concepts.length;
-  console.log('concepts:', join.concepts)
   for(i;i<l;i++){
 
     var concept = join.concepts[i];
     //find concept in each graph
-    console.log('looking for:'+concept.label);
     let concept1 = graph1.find('label',concept.label)
     let concept2 = graph2.find('label',concept.label)
     concept2.value = concept1.value;
@@ -136,7 +123,7 @@ function join(graph1, graph2, join) {
       var relationFound = findUuidInRelation(relation, concept1.uuid, concept2.uuid);
     }
 
-    graph1.delC(concept1.uuid); //delete not working yet
+    graph1.delC(concept1.uuid); 
     graph1.addC(concept2);
 
     //replace concept with concept from graph2 connect relation to said concept
@@ -210,19 +197,14 @@ function algoC (graph, axioms) {
     //find common projections in the axioms store
     for(var i =0; i<this.axioms.length; i++) {
       let temp = projection(this.w,this.axioms[i]); //temp = set of common projections
-      console.log('found:'+temp);
       if(temp != undefined) { //if not undefined
         temp.index = i;
         this.listj.push(temp)
       }
     }
     this.listj.sort(preferred) //sort by preferred axiom
-    console.log('preferred');
-    console.log(this.listj);
     //perform first join, then try to answer question mark.
     let v = this.listj.shift();
-    console.log(v);
-    console.log(v.index);
     join(this.w,this.axioms[v.index],v);
     render(this.w, 'cont')
     let ans = answer(this.w); //if we can answer, true
