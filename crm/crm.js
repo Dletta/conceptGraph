@@ -11,7 +11,26 @@ var aStore = new axiomStore ('app');
 // Definition
 // Lexicon
 
-var html = new Thing('HTMLElement Axiom', 'axiom', uuidv4());
+/*
+* 'Number1 which is arg1 of sum and Number2 which is arg2 of sum, where Sum
+* results in Number3'
+*                              [Number3]
+*                                  ^
+*                                  |
+*                               ( Res )
+*                                  ^
+*                                  |
+*       [Number1] -> ( arg1 ) -> [Sum] <- ( arg2 ) <- [Number2]
+*
+*/
+
+// Term Axiom
+// 		Term: a word or phrase used to describe a thing or to express a concept, 
+// 		especially in a particular kind of language or branch of study.
+var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
+
+
+
 
 var number1 = new Thing ('Number', 'concept', uuidv4());
 html.addConcept(number1);

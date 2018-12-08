@@ -151,3 +151,114 @@ Sowa describes:
 - Type Hierarchy
 - Schema (i.e. frames, scripts, MOPs, scenarios)
 - Inheritance
+
+```
+// 		especially in a particular kind of language or branch of study.
+var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
+
+∀x∃y RFP(x) - Create(y, x) ∧ Company(y) ∨ → ↔ ¬ 
+
+RFP → Thing 
+
+// [RFP]-()-[Create]-()-[Company]
+
+query: RFP:['#125']
+
+algoC to find , join -> [RFP:'125']-(obj)-[CREATE]-(agent)-[Company:'?']
+// Get company  fetch node '125' from gun and traverse create edge and return target of edge
+
+[Person: {Sue, Liz}]-agent-[Dance]
+
+
+gun.get('Person').get(Sue).put({label:'sue',agent:{label:'dance'}})
+
+var concept = {label:'', function:'', value:''}
+
+gun.set({concept:'', ''}  )
+
+function Thing (label, type, uuid, arcs, value) {
+  this.label = label;
+  this.type = type; //graph axiom/context, concept, relation
+  this.uuid = uuid;
+  this.arcs = arcs;
+  this.value = value;
+  this.concept = []; //concept array for axioms
+  this.relation = [];
+  
+thing => storage => Object.assign(new Thing(), data) 
+  
+  // Term Axiom
+// 		Term: a word or phrase used to describe a thing or to express a concept, 
+// 		especially in a particular kind of language or branch of study.
+// Language = HTML
+  
+var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
+
+  Term → ... Translate(Concept)
+  
+  HTML 			 		Javascript
+  
+  Javascript 		Javascript
+  
+  Term → ... Translate(Concept)
+  
+  Translate(Javascript) ↔ AxiomTerm Translate(Javascript)
+  
+  I have <div class="person" />
+  I have Concept('Person')
+  I have Relation({source: Concept, target: Term})
+  I have Relation({source: Term, target: Term})
+  
+  Translate Person
+  
+  Blog post
+  4 overviews of the latest blog post?
+  
+  Context(Overview)
+   context(blogpost1)
+   context(footer)
+   context(sidemenu)
+  
+  [BlogPost]-has-[Title] Title-(is)-Link Title-is-HTML(h1)
+  [List]-has-ListItem List-html-ul'?' Listitem-html-li:'?' [DOM]-has-List ListItem-childOf-List List-parentOf-ListItem
+  
+  object-attr-innerHTML='dididididid'
+  DOM-has-object
+  
+  listed(linked(title(blog)))
+  
+  
+  context(list) translate HTML ? // <ul><li><a href="SDF">Blog Post Title</a></li></ul>
+  
+/*
+  <li class="vcard"> [vcardContainer:uuid]
+  <span class="adr">
+    <span class="street-address">665 3rd Street</span>
+    <span class="locality">San Francisco</span>
+    <span class="postal-code">94107</span>
+    <span class="region">California</span>
+  </span>
+  </li>
+*/
+  
+  vcard [Person:'Jake']-(arg)-[Retrieve]-(res)-[vcard:object]
+  Bio
+  
+  
+  var add = new Thing('Sum Axiom', 'axiom', uuidv4());
+  
+  [] - () - [] - () - []
+    
+  [CompanyContext]-(agent)-[Create]-(obj)-[PRF]
+  [Company]-attr-[Name]
+  [Company]-attr-[Address]
+  [Entity]-attr-[Name]  
+  Thing:RFP
+  Join [Company]<[Entity] ∀x∃y Entity(x) ∧ has(x,y) ∧ Name(y);    ∨ → ↔ ¬ 
+  
+  language?
+  'context'
+  uuid
+  contract Company(uuid,context) ↔ Company(uuid,context)
+  
+  ```
