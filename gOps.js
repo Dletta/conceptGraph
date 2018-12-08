@@ -20,19 +20,19 @@ var aStore = new axiomStore ('app');
 
 var add = new Thing('Sum Axiom', 'axiom', uuidv4());
 var number1 = new Thing ('Number', 'concept', uuidv4());
-add.addC(number1);
+add.addConcept(number1);
 var number2 = new Thing('Number', 'concept', uuidv4());
-add.addC(number2);
+add.addConcept(number2);
 var sum = new Thing('Sum', 'concept', uuidv4());
-add.addC(sum);
+add.addConcept(sum);
 var numberE = new Thing('Number','concept', uuidv4());
-add.addC(numberE);
+add.addConcept(numberE);
 var arg1 = new Thing('arg1', 'relation', uuidv4(), {source:number1.uuid,target:sum.uuid});
-add.addR(arg1);
+add.addRelation(arg1);
 var arg2 = new Thing('arg2', 'relation', uuidv4(), {source:number2.uuid,target:sum.uuid});
-add.addR(arg2);
+add.addRelation(arg2);
 var res = new Thing('res', 'relation', uuidv4(), {source:sum.uuid,target:numberE.uuid});
-add.addR(res);
+add.addRelation(res);
 
 /*
 * 'A manager is an agent of hiring the patient Person'
@@ -42,15 +42,15 @@ add.addR(res);
 
 var manhiper = new Thing('Manager Axiom', 'axiom', uuidv4());
 var manager = new Thing('Manager', 'concept', uuidv4());
-manhiper.addC(manager);
+manhiper.addConcept(manager);
 var hire = new Thing('Hire', 'concept', uuidv4());
-manhiper.addC(hire);
+manhiper.addConcept(hire);
 var agent = new Thing('agent', 'relation', uuidv4(), {source:manager.uuid,target:hire.uuid});
-manhiper.addR(agent);
+manhiper.addRelation(agent);
 var person = new Thing('Person', 'concept', uuidv4());
-manhiper.addC(person);
+manhiper.addConcept(person);
 var patient = new Thing('patient', 'relation', uuidv4(), {source:hire.uuid,target:person.uuid});
-manhiper.addR(patient);
+manhiper.addRelation(patient);
 
 /*
 * 'A person who is the patient of being hired, at a certain date. Where the date has a day of the week'
@@ -65,16 +65,16 @@ manhiper.addR(patient);
 
 var hireDate = new Thing('Hire Date Axiom', 'axiom', uuidv4());
 var date = new Thing('Date', 'concept', uuidv4());
-hireDate.addC(date);
-hireDate.addC(hire);
-hireDate.addC(person);
+hireDate.addConcept(date);
+hireDate.addConcept(hire);
+hireDate.addConcept(person);
 var patient1 = new Thing('patient', 'relation',uuidv4(), {source:hire.uuid,target:person.uuid});
-hireDate.addR(patient1);
+hireDate.addRelation(patient1);
 var at = new Thing('at', 'relation', uuidv4(), {source:hire.uuid,target:date.uuid});
 var day = new Thing('Day of the Week', 'concept', uuidv4());
-hireDate.addC(day);
+hireDate.addConcept(day);
 var has = new Thing('has', 'relation', uuidv4(), {source:date.uuid,target:day.uuid});
-hireDate.addR(has);
+hireDate.addRelation(has);
 
 /* Adding axioms to the store */
 
@@ -97,19 +97,19 @@ aStore.axioms.push(hireDate);
 
 var query = new Thing('queryGraph', 'axiom', uuidv4());
 var hire1 = new Thing('Hire', 'concept', uuidv4());
-query.addC(hire1);
+query.addConcept(hire1);
 var person1 = new Thing('Person', 'concept', uuidv4(),{},'?');
-query.addC(person1);
+query.addConcept(person1);
 var patient2 = new Thing('patient', 'relation', uuidv4(), {source:hire1.uuid,target:person1.uuid});
-query.addR(patient2);
+query.addRelation(patient2);
 var manager1 = new Thing('Manager', 'concept', uuidv4(),{} ,'Jake');
-query.addC(manager1);
+query.addConcept(manager1);
 var agent1 = new Thing('agent', 'relation', uuidv4(), {source:hire1.uuid,target:manager1.uuid});
-query.addR(agent1);
+query.addRelation(agent1);
 var date1 = new Thing('Date', 'concept', uuidv4(), {}, '?');
-query.addC(date1);
+query.addConcept(date1);
 var at = new Thing('at', 'relation', uuidv4(), {source:hire1.uuid,target:date1.uuid});
-query.addR(at);
+query.addRelation(at);
 
 /*
 * Execute test

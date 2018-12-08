@@ -143,3 +143,11 @@ According to Sowa, there are three variations of factors for lexicons:
 - Cultural
 
 Which can be expressed in __canonical graphs__.
+
+Sowa describes:
+- Concepts
+- Instances
+- Conceptual Relations
+- Type Hierarchy
+- Schema (i.e. frames, scripts, MOPs, scenarios)
+- Inheritance
