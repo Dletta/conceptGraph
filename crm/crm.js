@@ -1,3 +1,16 @@
+    var push = function() {
+      var input = document.getElementById('editor');
+      gun.get('functions').put({add:input.value});
+      console.log(input.value + ' saved');
+    }
+
+    var pull = function(data, key) {
+      var scr = document.createElement('script');
+      scr.innerHTML = data;
+      document.all[0].appendChild(scr);
+      console.log('pulled function');
+    }
+
 
 /*
 * make an instance of a axiomStore and add a few axioms to play with
@@ -31,7 +44,7 @@ var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
 
 
 
-
+/*
 var number1 = new Thing ('Number', 'concept', uuidv4());
 html.addConcept(number1);
 var number2 = new Thing('Number', 'concept', uuidv4());
@@ -49,6 +62,7 @@ add.addRelation(res);
 
 console.log("Paste 'var add = function(a,b){return a+b;}'");
 
+*/
 
 /*
 * 'Number1 which is arg1 of sum and Number2 which is arg2 of sum, where Sum
@@ -83,7 +97,6 @@ var query = new Thing('queryGraph', 'axiom', uuidv4());
 /* Adding axioms to the store */
 
 aStore.axioms.push(add);
-render(add, 'cont')
 //render(manhiper, 'cont')
 //render(hireDate, 'cont')
 
@@ -91,92 +104,6 @@ render(add, 'cont')
 * Execute test
 */
 
-var temp = new algoC (query, aStore);
-temp.start()
+// var temp = new algoC (query, aStore);
+// temp.start()
 
-
-/*
-* Function that takes an axiom and creates a view from interval
-* @param {axiom} axiom - axiom to render
-* @param {uuid} contId - id of the container in the html code
-*/
-
-function render(axiom, contId) {
-  var container = document.body;
-  console.log(container);
-  var div = document.createElement('div');
-  var text = document.createTextNode(axiom.label);
-  div.appendChild(text);
-  div.setAttribute('name',axiom.label);
-  div.setAttribute('id',axiom.uuid);
-  div.setAttribute('class','axiom');
-
-  var i = 0;
-  var l = axiom.concept.length;
-  for (i;i<l;i++) {
-    var div1 = document.createElement('div');
-    var text = document.createTextNode('label: ' + axiom.concept[i].label);
-    div1.appendChild(text);
-    var br = document.createElement('br');
-    div1.appendChild(br);
-    var text = document.createTextNode('uuid: ' + axiom.concept[i].uuid);
-    div1.appendChild(text);
-    var br = document.createElement('br');
-    div1.appendChild(br);
-    var text = document.createTextNode('value: '+ axiom.concept[i].value);
-    div1.appendChild(text);
-    var br = document.createElement('br');
-    div1.appendChild(br);
-    var text = document.createElement('input');
-    text.setAttribute('id','val'+axiom.concept[i].uuid)
-    div1.appendChild(text);
-    div1.setAttribute('name',axiom.concept[i].label);
-    div1.setAttribute('class','concept');
-    div.appendChild(div1);
-  }
-
-  var i = 0;
-  var l = axiom.relation.length;
-  for (i;i<l;i++) {
-    var div1 = document.createElement('div');
-    var text = document.createTextNode('label: ' + axiom.relation[i].label);
-    div1.appendChild(text);
-
-    var br = document.createElement('br');
-    div1.appendChild(br);
-
-    var text = document.createTextNode('uuid: ' + axiom.relation[i].uuid);
-    div1.appendChild(text);
-
-    var br = document.createElement('br');
-    div1.appendChild(br);
-
-    var text = document.createTextNode('source: ');
-    div1.appendChild(text);
-
-    var br = document.createElement('br');
-    div1.appendChild(br);
-
-    var text = document.createTextNode(axiom.relation[i].arcs.source);
-    div1.appendChild(text);
-
-    var br = document.createElement('br');
-    div1.appendChild(br);
-
-    var text = document.createTextNode('target: ');
-    div1.appendChild(text);
-
-    var br = document.createElement('br');
-    div1.appendChild(br);
-
-    var text = document.createTextNode(axiom.relation[i].arcs.target);
-    div1.appendChild(text);
-
-    div1.setAttribute('name',axiom.relation[i].label);
-    div1.setAttribute('class','relation');
-
-    div.appendChild(div1);
-  }
-
-  container.appendChild(div);
-}

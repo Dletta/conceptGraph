@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" style="margin:0;padding:0;">
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="ux.css">
@@ -27,19 +27,44 @@
     var peers = ['http://localhost:8000/gun'/*,'https://notabug.io/gun'*/]
     var gun = Gun({peers:peers, localStorage: false, radisk:false});
 
-    console.log("Paste 'var add = function(a,b){return a+b;}'");
-    var push = function() {
-      var input = document.getElementById('editor');
-      gun.get('functions').put({add:input.value});
-      console.log(input.value + ' saved');
+  </script>
+
+    <textarea style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0;" 
+    onKeyUp="evalSource(event)"
+    onKeyDown="evalSource(event)"
+  ></textarea>
+
+  <style type="text/css">
+    iframe {
+      position:fixed;
+      left:0;
+      top:0;
+      z-index:1;
+      height:100vh;
+      width:49.5vw;
+      border:5px solid blue;
+      padding:0;margin:0;
+    }
+</style>
+
+  <script>
+
+    function evalSource(event) {
+    
+     /* var oldThing = document.getElementById('Thing1');
+      if(oldThing !== null) {
+        oldThing.parentNode.removeChild(oldThing)
+      }*/
+
+      var thisThing = document.createElement('iframe');
+          thisThing.id = 'Thing1'
+      document.body.appendChild(thisThing);
+      frames[0].window.eval(event.target.value);
     }
 
-    var pull = function(data, key) {
-      var scr = document.createElement('script');
-      scr.innerHTML = data;
-      document.all[0].appendChild(scr);
-      console.log('pulled function');
-    }
+    evalSource();
+
   </script>
+
 
 </html>

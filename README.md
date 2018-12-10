@@ -152,6 +152,24 @@ Sowa describes:
 - Schema (i.e. frames, scripts, MOPs, scenarios)
 - Inheritance
 
+### Knowledge Engineering
+
+#### 1. Indentify the Task
+Determine what knowledge must be represented in order to connect problem instances to answers i.e. the PEAS Process:
+
+	- Performance Measure (be safe, maximize profits, obey laws)
+	- Environment (urban streets, weather, customers)
+	- Actuators: Used to measure the continuous and discrete process variables. 
+	- Sensors: Used to measure the continuous and discrete process variables.
+
+In our case, PEAS can be:
+	- Performance Measure: Document represents the information 
+	- Environment: Computer, Network, Person
+	- Actuators: DOM / 
+	- Sensors: Listeners
+
+2. Assemble the Relevant Knowledge
+
 ```
 // 		especially in a particular kind of language or branch of study.
 var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
