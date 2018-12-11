@@ -52,9 +52,10 @@
     function evalSource(event) {
 
       var oldThing = document.getElementById('Thing1');
-      if(oldThing !== null) { //preserve state by not replacing, but keeping item.
-        frames[0].window.eval(event.target.value);
-        return;
+      if(oldThing !== null) {
+        document.body.removeChild(Thing1)
+        //frames[0].window.eval(event.target.value); //when you do this things get added doubled
+        //return;
       }
 
       var thisThing = document.createElement('iframe');
