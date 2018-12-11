@@ -29,9 +29,9 @@
 
   </script>
 
-    <textarea style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0;"
-    onKeyUp="evalSource(event)"
-    onKeyDown="evalSource(event)"
+    <textarea id="source" style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0;"
+    onKeyUp="reboot()"
+    onKeyDown="reboot()"
   ></textarea>
 
   <style type="text/css">
@@ -49,24 +49,76 @@
 
   <script>
 
-    function evalSource(event) {
+  // Options for the observer (which mutations to observe)
+  var config = { attributes: true, childList: true, subtree: true };
+       
+  var machineContext = null;
 
-      var oldThing = document.getElementById('Thing1');
-      if(oldThing !== null) {
-        //document.body.removeChild(Thing1)
-        frames[0].window.eval(event.target.value); //when you do this things get added doubled
-        return;
+  // Callback function to execute when mutations are observed on Thing1
+  var setMachineContext = function(mutationsList, observer) {
+      for (var m = 0; m < mutationsList.length; m++) {
+        var mutation = mutationsList[m];
+        for (var aN = 0; aN < mutation.addedNodes.length; aN++) {
+          var node = mutation.addedNodes[aN];
+          if (node.id === 'Thing1') {
+            machineContext = node;
+            //node.contentDocument.body.innerHTML = '<p>HI</p>';  
+            evalSource()
+            //alert('source evald')
+          }
+        }
+
       }
+      
+  };
+  // Begin Observing Thing1
+  var observer = new MutationObserver(setMachineContext);
 
-      var thisThing = document.createElement('iframe');
-          thisThing.id = 'Thing1';
-      let temp = document.createElement('script');
+  // Evaluate the TextArea Source
+  // Injects script into iFrame
+  var evalSource = function() {
+      var script = machineContext.contentWindow.document.createElement('script');
+      script.innerHTML = document.getElementById('source').value;
+      machineContext.contentWindow.document.body.appendChild(script);
+           // machineContext.contentWindow.document.body.innerHTML = '<p>HI</p>';  
+  }
+
+  // Start observing the target node for configured mutations
+  observer.observe(document.body, config)
+
+  var thisThing = document.createElement('iframe');
+      thisThing.id = 'Thing1';
+  document.body.appendChild(thisThing);
+
+  function reboot() {
+
+    console.log(machineContext)
+
+     var oldThing = document.getElementById('Thing1');
+         oldThing.parentNode.removeChild(oldThing);
+
+          
+      /*let temp = document.createElement('script');
         temp.setAttribute('src', "https://cdn.jsdelivr.net/npm/gun/gun.js");
         temp.setAttribute('type', "text");
-      document.body.appendChild(thisThing);
-      frames[0].window.document.writeln('<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"><'+'/script>')
+      */
+      
+
+      document.body.appendChild(oldThing);
+
+      /*frames[0].window.document.writeln('<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"><'+'/script>')
       frames[0].window.document.writeln('<script src="../lib/_helpers.js"><'+'/script>')
-      frames[0].window.eval(event.target.value);
+      frames[0].window.document.writeln('<script src="../lib/thingg.js"><'+'/script>')
+      frames[0].window.document.writeln('<script src="../lib/relation.js"><'+'/script>')
+      frames[0].window.document.writeln('<script src="../lib/axiom.js"><'+'/script>')
+      frames[0].window.document.writeln('<script src="../lib/join.js"><'+'/script>')
+      frames[0].window.document.writeln('<script src="../lib/stores.js"><'+'/script>')
+      */
+
+      /*if(oldThing === null) {
+        frames[0].window.eval(event.target.value);
+      }
+      */
     }
 
     //evalSource();
