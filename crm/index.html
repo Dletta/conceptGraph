@@ -14,7 +14,7 @@
   <!-- LIBRARIES -->
   <script src="../lib/_helpers.js" charset="utf-8"></script>
   <script src="../lib/thing.js" charset="utf-8"></script>
-  <script src="../lib/axiom.js" charset="utf-8"></script>
+  <!--<script src="../lib/axiom.js" charset="utf-8"></script>-->
 
   <script src="../lib/relation.js" charset="utf-8"></script>
   <script src="../lib/join.js" charset="utf-8"></script>
@@ -29,7 +29,7 @@
 
   </script>
 
-    <textarea style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0;" 
+    <textarea style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0;"
     onKeyUp="evalSource(event)"
     onKeyDown="evalSource(event)"
   ></textarea>
@@ -50,19 +50,24 @@
   <script>
 
     function evalSource(event) {
-    
-     /* var oldThing = document.getElementById('Thing1');
-      if(oldThing !== null) {
-        oldThing.parentNode.removeChild(oldThing)
-      }*/
+
+      var oldThing = document.getElementById('Thing1');
+      if(oldThing !== null) { //preserve state by not replacing, but keeping item.
+        frames[0].window.eval(event.target.value);
+        return;
+      }
 
       var thisThing = document.createElement('iframe');
-          thisThing.id = 'Thing1'
+          thisThing.id = 'Thing1';
+      let temp = document.createElement('script');
+        temp.setAttribute('src', "https://cdn.jsdelivr.net/npm/gun/gun.js");
+        temp.setAttribute('type', "text");
       document.body.appendChild(thisThing);
+      frames[0].window.document.body.appendChild(temp);
       frames[0].window.eval(event.target.value);
     }
 
-    evalSource();
+    //evalSource();
 
   </script>
 
