@@ -258,7 +258,7 @@ function saveAxiom (aId) {
 * Function that takes an axiom and creates a view from interval
 * @param {axiom} axiom - axiom to render
 * @param {uuid} contId - id of the container in the html code
-*/
+
 
 function render(axiom, contId) {
   var container = document.getElementById(contId);
@@ -339,3 +339,4 @@ function render(axiom, contId) {
 
   container.appendChild(div);
 }
+*/

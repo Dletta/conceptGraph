@@ -19,6 +19,7 @@
   <script src="../lib/relation.js" charset="utf-8"></script>
   <script src="../lib/join.js" charset="utf-8"></script>
   <script src="../lib/stores.js" charset="utf-8"></script>
+  <script src="../lib/graphToHtml.js" charset="utf-8"></script>
 
   <!-- PLAYGROUND -->
   <script src="crm.js" charset="utf-8"></script>
@@ -45,13 +46,13 @@
       border:5px solid blue;
       padding:0;margin:0;
     }
-</style>
+  </style>
 
   <script>
 
   // Options for the observer (which mutations to observe)
   var config = { attributes: true, childList: true, subtree: true };
-       
+
   var machineContext = null;
 
   // Callback function to execute when mutations are observed on Thing1
@@ -66,7 +67,7 @@
 
             console.log(machineContext.srcdoc) //document.getElementById('source').value
             machineContext.srcdoc = document.getElementById('source').value;
-            //node.contentDocument.body.innerHTML = '<p>HI</p>';  
+            //node.contentDocument.body.innerHTML = '<p>HI</p>';
             //evalSource()
             //alert('source evald')
           }
@@ -82,13 +83,13 @@
 
             document.body.appendChild(newThing);
             //machineContext = node;
-            //node.contentDocument.body.innerHTML = '<p>HI</p>';  
+            //node.contentDocument.body.innerHTML = '<p>HI</p>';
             //evalSource()
             //alert('source evald')
           }
         }
       }
-      
+
   };
   // Begin Observing Thing1
   var observer = new MutationObserver(setMachineContext);
@@ -101,7 +102,7 @@
       machineContext.contentWindow.document.body.appendChild(script);
       */
      // machineContext.contentWindow.eval(document.getElementById('source').value);
-           // machineContext.contentWindow.document.body.innerHTML = '<p>HI</p>';  
+           // machineContext.contentWindow.document.body.innerHTML = '<p>HI</p>';
   //}
 
 
@@ -119,12 +120,12 @@
 
      var oldThing = document.getElementById('Thing1');
          oldThing.parentNode.removeChild(oldThing);
-          
+
       /*let temp = document.createElement('script');
         temp.setAttribute('src', "https://cdn.jsdelivr.net/npm/gun/gun.js");
         temp.setAttribute('type', "text");
       */
-      
+
 
 
       /*frames[0].window.document.writeln('<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"><'+'/script>')
