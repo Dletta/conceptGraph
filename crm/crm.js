@@ -101,8 +101,45 @@ aStore.axioms.push(manhiper);
 aStore.axioms.push(hireDate);
 
 /*
+* Represent a Person Form in a Conceptual Graph
+* Enter a Person, Find a Person, Click Save
+*/
+
+//form axiom
+var persForm = new Thing('Person Form', 'axiom', uuidv4());
+// Person Axiom which contains fields
+var persCon = new Thing('Person', 'Concept', uuidv4(), {}, '*');
+persForm.addConcept(persCon);
+var name1 = new Thing('Name', 'Concept', uuidv4(), {}, '*');
+persForm.addConcept(name1);
+var address = new Thing('Address', 'Concept', uuidv4(), {}, '*');
+persForm.addConcept(address);
+//relation contains arc0 is container
+var contains = new Thing('contains', 'Relation', uuidv4(), {0:persCon,1:name1,2:address})
+persForm.addRelation(contains);
+
+//returns the form based on the contain rule
+function html (relation) {
+  var string = '<div';
+  string += ' name=' + relation.label;
+  string += ' id=' + relation.uuid;
+  string += ' class="relation">';
+  string += '<div>' + relation.arcs[0].label + '<br>';
+  string += '<p>' + relation.arcs[1].label; //replace with arc[1].html once I figure it out
+  string += ': <input value="' + relation.arcs[1].value + '"></p>';
+  string += '<p>' + relation.arcs[2].label;
+  string += ': <input value="' + relation.arcs[2].value + '"></p>';
+  string += '</div>';
+  string += '</div>'
+  return string;
+};
+
+contains.html = html(contains);
+
+/*
 * Execute test
 */
 
 var temp = new algoC (query, aStore);
-setTimeout(()=>temp.start(), 1000);
+//setTimeout(()=>temp.start(), 1000);
+setTimeout(()=>render(persForm), 200);
