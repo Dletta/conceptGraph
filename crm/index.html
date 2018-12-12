@@ -62,12 +62,30 @@
           var node = mutation.addedNodes[aN];
           if (node.id === 'Thing1') {
             machineContext = node;
+            //machineContext.contentWindow.eval(document.getElementById('source').value);
+
+            console.log(machineContext.srcdoc) //document.getElementById('source').value
+            machineContext.srcdoc = document.getElementById('source').value;
             //node.contentDocument.body.innerHTML = '<p>HI</p>';  
-            evalSource()
+            //evalSource()
             //alert('source evald')
           }
         }
 
+        for (var rN = 0; rN < mutation.removedNodes.length; rN++) {
+          var node = mutation.removedNodes[rN];
+          if (node.id === 'Thing1') {
+
+            var newThing = document.createElement('iframe');
+            newThing.id = 'Thing1';
+
+            document.body.appendChild(newThing);
+            //machineContext = node;
+            //node.contentDocument.body.innerHTML = '<p>HI</p>';  
+            //evalSource()
+            //alert('source evald')
+          }
+        }
       }
       
   };
@@ -76,12 +94,15 @@
 
   // Evaluate the TextArea Source
   // Injects script into iFrame
-  var evalSource = function() {
-      var script = machineContext.contentWindow.document.createElement('script');
+  /*var evalSource = function() {
+      /*var script = machineContext.contentWindow.document.createElement('script');
       script.innerHTML = document.getElementById('source').value;
       machineContext.contentWindow.document.body.appendChild(script);
+      */
+     // machineContext.contentWindow.eval(document.getElementById('source').value);
            // machineContext.contentWindow.document.body.innerHTML = '<p>HI</p>';  
-  }
+  //}
+
 
   // Start observing the target node for configured mutations
   observer.observe(document.body, config)
@@ -96,7 +117,6 @@
 
      var oldThing = document.getElementById('Thing1');
          oldThing.parentNode.removeChild(oldThing);
-
           
       /*let temp = document.createElement('script');
         temp.setAttribute('src', "https://cdn.jsdelivr.net/npm/gun/gun.js");
@@ -104,7 +124,6 @@
       */
       
 
-      document.body.appendChild(oldThing);
 
       /*frames[0].window.document.writeln('<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"><'+'/script>')
       frames[0].window.document.writeln('<script src="../lib/_helpers.js"><'+'/script>')
