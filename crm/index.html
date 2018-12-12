@@ -29,7 +29,7 @@
 
   </script>
 
-    <textarea id="source" style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0;"
+    <textarea id="source" style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0; white-space:pre;filter:invert(1); font-family:mono; font-size:12px;"
     onKeyUp="reboot()"
     onKeyDown="reboot()"
   ></textarea>
@@ -77,6 +77,7 @@
           if (node.id === 'Thing1') {
 
             var newThing = document.createElement('iframe');
+            newThing.sandbox = 'allow-scripts'
             newThing.id = 'Thing1';
 
             document.body.appendChild(newThing);
@@ -109,6 +110,7 @@
 
   var thisThing = document.createElement('iframe');
       thisThing.id = 'Thing1';
+      thisThing.sandbox = 'allow-scripts'
   document.body.appendChild(thisThing);
 
   function reboot() {
