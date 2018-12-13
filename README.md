@@ -280,3 +280,12 @@ var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
   contract Company(uuid,context) ↔ Company(uuid,context)
   
   ```
+  ```
+
+  git clone https://github.com/amark/gun.git
+cd gun
+docker build -t myrepo/gundb:v1 .
+docker run -p 8765:8765 myrepo/gundb:v1
+
+Runs on 18.222.4.31.
+```

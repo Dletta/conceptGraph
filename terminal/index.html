@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" style="margin:0;padding:0; background:#000; ">
+  <head>
+    <meta charset="utf-8">
+    <title>Editor</title>
+  </head>
+  <body>
+
+
+  </body>
+
+  <!-- LIBRARIES -->
+  <script src="../lib/_helpers.js" charset="utf-8"></script>
+  <script src="../lib/thing.js" charset="utf-8"></script>
+  <!--<script src="../lib/axiom.js" charset="utf-8"></script>-->
+
+  <script src="../lib/relation.js" charset="utf-8"></script>
+  <script src="../lib/join.js" charset="utf-8"></script>
+  <script src="../lib/stores.js" charset="utf-8"></script>
+  <script src="../lib/graphToHtml.js" charset="utf-8"></script>
+
+  <!-- PLAYGROUND -->
+  <script src="index.js" charset="utf-8"></script>
+
+    <textarea id="source" style="position:fixed;right:0;top:0;z-index:1;height:100vh;width:49vw;content-sizing:border-box;border:5px solid green;box-shadow:10px 10px 10px black;padding:0;margin:0; white-space:pre;filter:invert(1); font-family:mono; font-size:12px;"
+    onInput="handleInput()"
+  ></textarea>
+
+  <style type="text/css">
+    iframe {
+      position:fixed;
+      left:0;
+      top:0;
+      z-index:1;
+      height:100vh;
+      width:49.5vw;
+      border:5px solid blue;
+      padding:0;margin:0;
+      filter:invert(1);
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script>
+
+  // Options for the observer (which mutations to observe)
+  var config = { attributes: true, childList: true, subtree: true };
+
+  var machineContext = null;
+
+  var peers = ['http://18.222.4.31:8765/gun'/*,'https://notabug.io/gun'*/]
+ var gun = Gun({peers:peers, localStorage: false, radisk:false});
+
+
+  // Callback function to execute when mutations are observed on Thing1
+  var setMachineContext = function(mutationsList, observer) {
+      for (var m = 0; m < mutationsList.length; m++) {
+        var mutation = mutationsList[m];
+
+        for (var aN = 0; aN < mutation.addedNodes.length; aN++) {
+          var node = mutation.addedNodes[aN];
+
+          if (node.id === 'Thing1') {
+            machineContext = node;
+            // old eval() = machineContext.contentWindow.eval(document.getElementById('source').value);
+            machineContext.srcdoc = document.getElementById('source').value;
+
+          }
+        }
+
+        for (var rN = 0; rN < mutation.removedNodes.length; rN++) {
+          var node = mutation.removedNodes[rN];
+          if (node.id === 'Thing1') {
+
+            var newThing = document.createElement('iframe');
+            newThing.sandbox = 'allow-scripts'
+            newThing.id = 'Thing1';
+
+            document.body.appendChild(newThing);
+
+          }
+        }
+      }
+
+  };
+  // Begin Observing Thing1
+  var observer = new MutationObserver(setMachineContext);
+
+  // Start observing the target node for configured mutations
+  observer.observe(document.body, config)
+
+  var thisThing = document.createElement('iframe');
+      thisThing.id = 'Thing1';
+      thisThing.sandbox = 'allow-scripts'
+  document.body.appendChild(thisThing);
+
+  function handleInput() {
+    reboot();
+    gun.get('terminal').put({source:document.getElementById('source').value})
+  }
+
+  gun.get('terminal').on(function(data, key){
+    if(data.source !== document.getElementById('source').value) {
+     document.getElementById('source').value = data.source;
+      reboot();
+    }
+  });
+
+  function reboot() {
+   var oldThing = document.getElementById('Thing1');
+       oldThing.parentNode.removeChild(oldThing);
+  }
+
+  </script>
+
+
+</html>
