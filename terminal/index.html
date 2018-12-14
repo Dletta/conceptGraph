@@ -100,6 +100,7 @@
   }
 
   gun.get('terminal').on(function(data, key){
+    console.log('.on called');
     if(data.source !== document.getElementById('source').value) {
      document.getElementById('source').value = data.source;
       reboot();
