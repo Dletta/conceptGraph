@@ -1,5 +1,7 @@
 # conceptGraph
 
+[![Join the chat at https://gitter.im/conceptGraph/Lobby](https://badges.gitter.im/conceptGraph/Lobby.svg)](https://gitter.im/conceptGraph/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Conceptual Graphs inspired by John F Sowa.
 
 Create Concept Graphs and Schemas, that can call functions and access databases
