@@ -97,6 +97,24 @@ The join function:
 >find concept2 of join in graph1 and graph2 and merge them together
 
 
+## Contexts
+
+Contextual Logic References:
+- http://www.existential-graphs.info/Papers/ICFCA2003.pdf
+- https://archive.org/details/springer_10.1007-b101693/page/n13
+- https://link.springer.com/book/10.1007%2F3-540-45483-7 (https://books.google.ca/books?id=Ya6qCAAAQBAJ&pg=PA59&lpg=PA59&dq=%22power+context+family%22&source=bl&ots=8i8vLtoYd4&sig=C6sLCwU2OXrhMzIkakigyrs_wS4&hl=en&sa=X&ved=2ahUKEwijv8yT_6ffAhWEdN8KHRF5CKEQ6AEwBHoECAYQAQ#v=onepage&q=%22power%20context%20family%22&f=false)
+
+Implementations:
+- https://www.researchgate.net/figure/Relational-power-context-family-of-domestic-flights-in-Austria_fig45_323946631
+
+### Power Context Family
+
+### Situation / Propositions
+
+Situations & Propositions are types of contexts. 
+
+
+
 ## Language Generation & Mapping
 
 ### Utterance Paths
@@ -224,6 +242,7 @@ var AxiomTerm = new Thing ('Term Axiom', 'axiom', uuidv4());
   
   Translate(Javascript) ↔ AxiomTerm Translate(Javascript)
   
+
   I have <div class="person" />
   I have Concept('Person')
   I have Relation({source: Concept, target: Term})
