@@ -105,5 +105,42 @@ manhiper.addRelation(patient);
 
 aStore.axioms.push(manhiper);
 
+var aSwan = new Thing('aSwan', 'axiom', uuidv4());
+var swan = aSwan.addConcept('Swan', 'axiom', uuidv4(), {}, '*');
+var color = aSwan.addConcept('Color', 'concept', uuidv4(), {}, 'White');
+aSwan.addRelation('attr', 'relation', uuidv4(), {source: swan, target:color});
+
+aStore.axioms.push(aSwan);
+
+
 var Query = new Thing('Query', 'axiom', uuidv4());
 var qPerson = Query.addConcept('Person', 'concept', uuidv4(), {},"?");
+Query.concept[0].label = 'Swan'
+Query.concept[0].value = 'Charlie'
+Query.addConcept('Color', 'concept',uuidv4(),{},'Black');
+Query.addRelation('attr', 'relation', uuidv4(), {source:Query.concept[0].uuid,target:Query.concept[1].uuid});
+
+var temp = new algoC(Query, aStore);
+temp.start()
+
+function translate(graph) {
+  var string = '';
+  var i = 0;
+  var l = graph.relation.length;
+  for(i;i<l;i++){
+    let temp = graph.relation[i];
+    console.log(temp);
+    string += graph.find('uuid',temp.arcs['source']).label;
+    string += ':';
+    string += graph.find('uuid',temp.arcs['source']).value;
+    string += ' ';
+    string += graph.relation[i].label;
+    string += ' ';
+    string += graph.find('uuid', temp.arcs['target']).label;
+    string += ':';
+    string += graph.find('uuid', temp.arcs['target']).value;
+    string += ' ';
+    string += '::; '
+  }
+  console.log(string);
+}
