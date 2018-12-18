@@ -106,6 +106,23 @@ Contextual Logic References:
 
 Implementations:
 - https://www.researchgate.net/figure/Relational-power-context-family-of-domestic-flights-in-Austria_fig45_323946631
+- https://link.springer.com/content/pdf/10.1007%2Fs11036-017-0899-5.pdf
+
+## Algorithms:
+
+- COI (Context of Interest)
+- R (Rules)
+- F (Facts)
+- CS (Context Set)
+
+```
+
+(COI?) { 
+  for (Rules) {
+    if ∃x is ∈ of COI such that x ∈
+  }
+}
+```
 
 ### Power Context Family
 
@@ -113,7 +130,11 @@ Implementations:
 
 Situations & Propositions are types of contexts. 
 
+### Obligation vs. Permission vs. Prohibition
 
+Forming the bases of contracts
+
+### Bayesian / Probabilistic Context?
 
 ## Language Generation & Mapping
 
