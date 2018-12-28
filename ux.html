@@ -21,21 +21,18 @@
   <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
   <!-- SETUP -->
   <script type="text/javascript">
-    var peers = [/*'http://localhost:8000/gun'*//*,'https://notabug.io/gun'*/]
+    var peers = ['http://18.222.4.31:8765/gun']
     var gun = Gun({peers:peers, /*localStorage: false, radisk:false*/});
-
-    console.log("Paste 'var add = function(a,b){return a+b;}'");
-    var push = function() {
-      var input = document.getElementById('editor');
-      gun.get('functions').put({add:input.value});
-      console.log(input.value + ' saved');
-    }
-
-    var pull = function(data, key) {
+    var script = gun.get('script');
+    script.map().once(inject);
+    function inject (obj, key) {
+      console.log(key, obj);
       var scr = document.createElement('script');
-      scr.innerHTML = data;
+      scr.setAttribute('date', obj.date);
+      scr.setAttribute('version', obj.version);
+      scr.setAttribute('createdBy', obj.creator);
+      scr.innerHTML = obj.script;
       document.all[0].appendChild(scr);
-      console.log('pulled function');
     }
   </script>
 
