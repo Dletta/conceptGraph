@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Wumpus CG</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <<script type="text/javascript">
+    var gun = new Gun();
+  </script>
+  <script src="../lib/_helpers.js" charset="utf-8"></script>
+  <script src="../lib/typehierarchy.js" charset="utf-8"></script>
+  <script src="../lib/thing.js" charset="utf-8"></script>
+  <script src="../lib/relation.js" charset="utf-8"></script>
+  <script src="../lib/graphToHtml.js" charset="utf-8"></script>
+  <script src="../lib/join.js" charset="utf-8"></script>
+  <script src="../lib/stores.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    /* Creating a wumpus world with an adventurer steered using
+    * Conceptual Graphs KB system
+    */
+    var wumpus = false;
+
+    function wumpusWorld (name) {
+      this.name = name;
+      this.world = new Map();
+      this.width = 4;
+      this.height = 4;
+      this.player = {};
+      this.player.x = 0;
+      this.player.y = 3;
+      this.render = function(can) {
+	       var can = can;
+	       var ctx = can.getContext('2d');
+	       var scale = 15;
+	       ctx.clearRect(0, 0, can.width, can.height);
+	       for(var i=0; i<this.width;i++){
+		       for(var j=0; j<this.height;j++){
+            var temp = '';
+            temp += i;
+            temp += j;
+            console.log(temp);
+            console.log(this.world.get(temp));
+            ctx.fillStyle = this.world.get(temp).color;
+            ctx.fillRect(i*scale , j*scale, scale, scale);
+           }
+         }
+         ctx.fillStyle = 'black';
+         ctx.fillRect(this.player.x*scale, this.player.y*scale, scale, scale)
+      };
+      this.init = function () {
+        for(var i=0;i<this.width;i++){
+          for(var y=0;y<this.height;y++){
+            var temp = '';
+            temp += i;
+            temp += y;
+            var object = {};
+            object.val = this.random();
+            this.world.set(temp,object);
+          }
+        }
+        for(var i=0;i<this.width;i++){
+          for(var y=0;y<this.height;y++){
+            var key = '';
+            key += i;
+            key += y;
+            var temp = this.world.get(key);
+            switch(temp.val){
+              case 'Wumpus':
+                temp.color = 'red';
+                console.log(temp);
+                break;
+              case 'Pit':
+                temp.color = 'blue';
+                break;
+              case 'Empty':
+                temp.color = 'grey';
+                break;
+              case 'Gold':
+                temp.color = 'yellow';
+                break;
+            }
+          }
+        }
+        console.log(this.world);
+      };
+      this.random = function () {
+        var test = Math.floor(Math.random() * 10);
+        if(!wumpus) {
+          wumpus = true;
+          return 'Wumpus';
+        }
+        if(test > 1 && test < 5) {
+          return 'Pit';
+        }
+
+        if(test == 9) {
+          return 'Gold';
+        }
+
+        return 'Empty';
+      };
+    };
+
+    var can = document.getElementById('canvas');
+    var temp = new wumpusWorld('test');
+    console.log('init');
+    temp.init();
+    console.log('rendering');
+    temp.render(can);
+  </script>
+</html>
