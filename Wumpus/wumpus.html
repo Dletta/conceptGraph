@@ -18,6 +18,7 @@
   <script src="../lib/graphToHtml.js" charset="utf-8"></script>
   <script src="../lib/join.js" charset="utf-8"></script>
   <script src="../lib/stores.js" charset="utf-8"></script>
+  <<script src="wumpusWorld.js" charset="utf-8"></script>
   <script type="text/javascript">
     /* Creating a wumpus world with an adventurer steered using
     * Conceptual Graphs KB system
@@ -59,6 +60,8 @@
             temp += y;
             var object = {};
             object.val = this.random();
+            object.color = '';
+            object.percept = [];
             this.world.set(temp,object);
           }
         }
@@ -71,16 +74,18 @@
             switch(temp.val){
               case 'Wumpus':
                 temp.color = 'red';
-                console.log(temp);
+                this.propagate('stench', i, y);
                 break;
               case 'Pit':
                 temp.color = 'blue';
+                this.propagate('breeze', i, y);
                 break;
               case 'Empty':
                 temp.color = 'grey';
                 break;
               case 'Gold':
                 temp.color = 'yellow';
+                temp.percept.push('glitter')
                 break;
             }
           }
@@ -103,6 +108,20 @@
 
         return 'Empty';
       };
+      this.propagate = function(percept,x, y) {
+        var n = JSON.stringify(x) + JSON.stringify(y-1);
+        var s = JSON.stringify(x) + JSON.stringify(y+1);
+        var w = JSON.stringify(x-1) + JSON.stringify(y);
+        var e = JSON.stringify(x+1) + JSON.stringify(y);
+        try{var temp = this.world.get(n).percept.push(percept);}
+        catch(err){console.log(err);}
+        try{var temp = this.world.get(s).percept.push(percept);}
+        catch(err){console.log(err);}
+        try{var temp = this.world.get(w).percept.push(percept);}
+        catch(err){console.log(err);}
+        try{var temp = this.world.get(e).percept.push(percept);}
+        catch(err){console.log(err);}
+      }
     };
 
     var can = document.getElementById('canvas');
@@ -111,5 +130,6 @@
     temp.init();
     console.log('rendering');
     temp.render(can);
+    
   </script>
 </html>
