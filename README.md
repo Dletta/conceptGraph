@@ -1,4 +1,14 @@
-# conceptGraph
+```
+
+                                    __                            __  
+  _________  ____  ________  ____  / /_   ____ __________ _____  / /_ 
+ / ___/ __ \/ __ \/ ___/ _ \/ __ \/ __/  / __ `/ ___/ __ `/ __ \/ __ \
+/ /__/ /_/ / / / / /__/  __/ /_/ / /_   / /_/ / /  / /_/ / /_/ / / / /
+\___/\____/_/ /_/\___/\___/ .___/\__/   \__, /_/   \__,_/ .___/_/ /_/ 
+                         /_/           /____/          /_/  
+----------------------------------------------------------------------   
+```
+
 
 [![Join the chat at https://gitter.im/conceptGraph/Lobby](https://badges.gitter.im/conceptGraph/Lobby.svg)](https://gitter.im/conceptGraph/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -97,6 +107,34 @@ The join function:
 >find concept2 of join in graph1 and graph2 and merge them together
 
 
+## To-Dos
+       
+
+CHAT
+JF: Terms & Contexts
+JD: good idea, keep chat separate
+Next Steps
+The construction of a document should be in javascript first
+
+- Create UUID for type for type hierarchy
+- generate rules based on type hierarchy
+- window context & language
+- Create a Language: Javascript
+- Prove equivalence between provability in given modal logics and a subset of the provable facts in the corresponding ML systems
+- Create a Proposition: A Document
+- Create a Situation: A Document
+- Make translation axiom
+- HTML Lexicon in Javascript e.g. exists? typeOf === HTMLElement
+- translate concept element to html
+- try to get tab working in this textarea
+- Making an HTML Component
+- Making an HTML Component an Axiom
+- Guaranteeing HTML Component's slot relates to childOf?
+- Creating New Person
+- Creating New Thing that is a Document
+- version-control this document
+
+
 ## Contexts
 
 Contextual Logic References:
@@ -115,7 +153,7 @@ Implementations:
 - F (Facts)
 - CS (Context Set)
 
-```
+```n
 
 (COI?) { 
   for (Rules) {

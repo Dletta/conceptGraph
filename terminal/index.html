@@ -6,7 +6,6 @@
   </head>
   <body>
 
-
   </body>
 
   <!-- LIBRARIES -->
@@ -38,6 +37,7 @@
       padding:0;margin:0;
       filter:invert(1);
     }
+
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
@@ -63,7 +63,7 @@
           if (node.id === 'Thing1') {
             machineContext = node;
             // old eval() = machineContext.contentWindow.eval(document.getElementById('source').value);
-            machineContext.srcdoc = document.getElementById('source').value;
+            machineContext.srcdoc = '<html><body>🄲🄾🄽🄲🄴🄿🅃 🄶🅁🄰🄿🄷<hr /><script>'+document.getElementById('source').value+'<\/script></body></html>';
 
           }
         }
