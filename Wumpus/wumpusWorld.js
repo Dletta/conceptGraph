@@ -37,17 +37,25 @@ function or (graphX, graphY) {
   /* define 3 axioms
     1 axiom which is [Proposition: GraphX]
   */
-
+  var propX = new Thing('Proposition', 'concept', uuidv4(), {}, x);
   /*
     2 axiom which is [Proposition: GraphY]
     */
-    
+  var propY = new Thing('Proposition', 'concept', uuidv4(), {}, y);
   /*
     3 axiom wich is (NEG)->[Proposition:
                       (NEG)->[Proposition: [Proposition: GraphX]]
                       (NEG)->[Proposition: [Proposition: GraphY]]
                     ]
     */
+
+  var negX = new Thing('Proposition', 'context', uuidv4());
+  var negY = new Thing('Proposition', 'context', uuidv4());
+  negX.addRelation('NEG', 'relation', uuidv4(), {0:negX});
+  negX.addConcept('Proposition', 'concept', uuidv4(), {}, propX);
+  negY.addRelation('NEG', 'relation', uuidv4(), {0:negY});
+  negY.addConcept('Proposition', 'concept', uuidv4(), {}, propY);
+  var or = new Thing('or', 'axiom', uuidv4());
 
 
 }

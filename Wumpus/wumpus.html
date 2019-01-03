@@ -8,7 +8,7 @@
     <canvas id="canvas" width="300" height="300"></canvas>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
-  <<script type="text/javascript">
+  <script type="text/javascript">
     var gun = new Gun();
   </script>
   <script src="../lib/_helpers.js" charset="utf-8"></script>
@@ -18,7 +18,7 @@
   <script src="../lib/graphToHtml.js" charset="utf-8"></script>
   <script src="../lib/join.js" charset="utf-8"></script>
   <script src="../lib/stores.js" charset="utf-8"></script>
-  <<script src="wumpusWorld.js" charset="utf-8"></script>
+  <script src="wumpusWorld.js" charset="utf-8"></script>
   <script type="text/javascript">
     /* Creating a wumpus world with an adventurer steered using
     * Conceptual Graphs KB system
@@ -43,8 +43,6 @@
             var temp = '';
             temp += i;
             temp += j;
-            console.log(temp);
-            console.log(this.world.get(temp));
             ctx.fillStyle = this.world.get(temp).color;
             ctx.fillRect(i*scale , j*scale, scale, scale);
            }
@@ -90,7 +88,6 @@
             }
           }
         }
-        console.log(this.world);
       };
       this.random = function () {
         var test = Math.floor(Math.random() * 10);
@@ -114,13 +111,13 @@
         var w = JSON.stringify(x-1) + JSON.stringify(y);
         var e = JSON.stringify(x+1) + JSON.stringify(y);
         try{var temp = this.world.get(n).percept.push(percept);}
-        catch(err){console.log(err);}
+        catch(err){}
         try{var temp = this.world.get(s).percept.push(percept);}
-        catch(err){console.log(err);}
+        catch(err){}
         try{var temp = this.world.get(w).percept.push(percept);}
-        catch(err){console.log(err);}
+        catch(err){}
         try{var temp = this.world.get(e).percept.push(percept);}
-        catch(err){console.log(err);}
+        catch(err){}
       }
     };
 
@@ -130,6 +127,6 @@
     temp.init();
     console.log('rendering');
     temp.render(can);
-    
+
   </script>
 </html>
