@@ -97,25 +97,3 @@ var bornTin = tinmanA.addConcept('Born', 'concept', uuidv4());
 var countryTin = tinmanA.addConcept('Country', 'concept', uuidv4(), {}, 'Oz');
 tinmanA.addRelation('object', 'relation', uuidv4(), {0:bornTin,1:tinman});
 tinmanA.addRelation('location', 'relation', uuidv4(), {0:bornTin,1:countryTin});
-
-function translate(graph) {
-  var string = '';
-  var i = 0;
-  var l = graph.relation.length;
-  for(i;i<l;i++){
-    let temp = graph.relation[i];
-    console.log(temp);
-    string += graph.find('uuid',temp.arcs[0]).label;
-    string += ':';
-    string += graph.find('uuid',temp.arcs[0]).value;
-    string += ' ';
-    string += graph.relation[i].label;
-    string += ' ';
-    string += graph.find('uuid', temp.arcs[1]).label;
-    string += ':';
-    string += graph.find('uuid', temp.arcs[1]).value;
-    string += ' ';
-    string += '::; '
-  }
-  console.log(string);
-}
