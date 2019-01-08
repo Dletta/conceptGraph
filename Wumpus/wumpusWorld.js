@@ -32,23 +32,41 @@ var gCounter = 0;
 function deepCompare (graph1, graph2) {
   let one = graph1;
   let two = graph2;
-  let result = true;
+  let result = false;
 
   for(let item of one.concept) {
-    console.log(item);
     for(let item2 of two.concept) {
-      console.log(item2);
-      console.log(result);
-      if(item.uuid == item2.uuid && !result) {
+      if(item.uuid == item2.uuid){
+        console.log(item2);
         result = true;
-      } else {
-        result = false;
+        break;
       }
     }
   }
 
   return result;
 }
+
+/*
+* Inference function
+*
+*/
+
+function inference () {
+  this.start = function () {
+
+  };
+  this.iterate = function() {
+
+  };
+  this.deiterate = function() {
+
+  };
+  this.erasure = function() {
+
+  };
+}
+
 
 /* Test inference with below graph showing that if you are born in Oz
  then you are a citizen. Tinman was born in Oz, therefore it is true he is a citizen.
@@ -97,6 +115,8 @@ var bornTin = tinmanA.addConcept('Born', 'concept', uuidv4());
 var countryTin = tinmanA.addConcept('Country', 'concept', uuidv4(), {}, 'Oz');
 tinmanA.addRelation('object', 'relation', uuidv4(), {0:bornTin,1:tinman});
 tinmanA.addRelation('location', 'relation', uuidv4(), {0:bornTin,1:countryTin});
+
+
 
 function translate(graph) {
   var string = '';
