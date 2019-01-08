@@ -115,6 +115,7 @@ var bornTin = tinmanA.addConcept('Born', 'concept', uuidv4());
 var countryTin = tinmanA.addConcept('Country', 'concept', uuidv4(), {}, 'Oz');
 tinmanA.addRelation('object', 'relation', uuidv4(), {0:bornTin,1:tinman});
 tinmanA.addRelation('location', 'relation', uuidv4(), {0:bornTin,1:countryTin});
+<<<<<<< HEAD
 
 
 
@@ -139,3 +140,5 @@ function translate(graph) {
   }
   console.log(string);
 }
+=======
+>>>>>>> b7e641decf4f1ef2119ed6f883457c87cf7f4adf
