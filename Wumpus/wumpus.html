@@ -134,7 +134,15 @@
 
     var nearley = window.nearley;
     const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar))
-    parser.feed("[Person]");
-    //console.log(parser.results);
+    var testInput = "[Person:John]->(Go)->[Destination:Boston]";
+    console.log(testInput);
+    parser.feed(testInput);
+    var ast = parser.results;
+    for(var result of ast) {
+      console.log(result);
+      for(var item of result.data) {
+        console.log(item[0]);
+      }
+    }
   </script>
 </html>
