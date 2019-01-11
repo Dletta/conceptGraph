@@ -7,9 +7,9 @@ var grammar = {
     ParserRules: [
     {"name": "Concept", "symbols": [{"literal":"["}, "Type", {"literal":"]"}]},
     {"name": "Type", "symbols": ["String"]},
-    {"name": "String$ebnf$1", "symbols": [/[a-zA-Z]/]},
-    {"name": "String$ebnf$1", "symbols": ["String$ebnf$1", /[a-zA-Z]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "String", "symbols": ["String$ebnf$1"]}
+    {"name": "String$ebnf$1", "symbols": [/[a-zA-z]/]},
+    {"name": "String$ebnf$1", "symbols": ["String$ebnf$1", /[a-zA-z]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "String", "symbols": ["String$ebnf$1"], "postprocess": d => d[0].join('')}
 ]
   , ParserStart: "Concept"
 }
