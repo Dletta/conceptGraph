@@ -1,0 +1,30 @@
+{
+  "name": "conceptgraph",
+  "version": "1.0.0",
+  "description": "Conceptual Graphs in Javascript",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "nearley": "^2.16.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dletta/conceptGraph.git"
+  },
+  "keywords": [
+    "concept",
+    "graphs"
+  ],
+  "author": "Jachen Duschletta, Jacob Friedman, Levi Roberts",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dletta/conceptGraph/issues"
+  },
+  "homepage": "https://github.com/Dletta/conceptGraph#readme"
+}
