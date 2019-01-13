@@ -1,25 +1,23 @@
-CG -> (Concept | Relation | To | From):+ {% function(d){
-  return {type: 'axiom', data:d[0]};
+CG         -> Label "::" ( Concept | Relation ):+ {% function(d){
+  return {type: 'axiom', label: d[0], data:d[2]};
   } %}
-Concept  -> "["  Label  (":"  Referent):?  "]" {% function(d){
-  var test = {};
-  test.label = d[1];
-  test.type = 'concept';
+Concept    -> "["  Label  (":"  Referent):?  identifier "]" {% function(d){
+  var con = {};
+  con.label = d[1];
+  con.type = 'concept';
   if(d[2]){
-    test.ref = d[2][1];
+    con.ref = d[2][1];
   }
-  return test;
+  con.identifier = d[3];
+  return con;
   }%}
-Relation -> "(" Label ")" {% function(d) {
-  return {type:d[1]};
+identifier -> ("*" Letter) {% (d)=> d[0].join('')%}
+Relation   -> "(" Label Arc:+ ")" {% function(d) {
+  return {label:d[1], type:'relation', arcI:d[2]};
   } %}
-To -> "->" {% function(d) {
-  return {type:'to'};
-  } %}
-From -> "<-" {% function(d) {
-  return {type:'from'};
-  } %}
-Label    -> Letter:+ {% (d,l,f)=> d[0].join('')%}
-Referent -> Mixed:+  {% (d,l,f)=> d[0].join('')%}
-Letter   -> [a-zA-Z]
-Mixed    -> [a-zA-Z0-9]
+Arc        -> ("?" Letter) {% (d)=> d[0].join('')%}
+Label      -> Letter:+ {% (d)=> d[0].join('')%}
+Referent   -> Mixed:+  {% (d)=> d[0].join('')%}
+Letter     -> [ a-zA-Z]
+Mixed      -> [ a-zA-Z0-9]
+#add support for rules

@@ -21,6 +21,7 @@
   <script src="../lib/stores.js" charset="utf-8"></script>
   <script src="../lib/infer.js" charset="utf-8"></script>
   <script src="../nearlygram/cgif.js" charset="utf-8"></script>
+  <script src="../lib/parse.js" charset="utf-8"></script>
   <script src="wumpusWorld.js" charset="utf-8"></script>
   <script type="text/javascript">
 
@@ -132,17 +133,5 @@
     console.log('rendering');
     temp.render(can);
 
-    var nearley = window.nearley;
-    const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar))
-    var testInput = "[Person:John]->(Go)->[Destination:Boston]";
-    console.log(testInput);
-    parser.feed(testInput);
-    var ast = parser.results;
-    for(var result of ast) {
-      console.log(result);
-      for(var item of result.data) {
-        console.log(item[0]);
-      }
-    }
   </script>
 </html>
