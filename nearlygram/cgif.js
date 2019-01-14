@@ -44,7 +44,7 @@ var grammar = {
     {"name": "Referent$ebnf$1", "symbols": ["Referent$ebnf$1", "Mixed"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "Referent", "symbols": ["Referent$ebnf$1"], "postprocess": (d)=> d[0].join('')},
     {"name": "Letter", "symbols": [/[ a-zA-Z]/]},
-    {"name": "Mixed", "symbols": [/[ a-zA-Z0-9]/]}
+    {"name": "Mixed", "symbols": [/[ a-zA-Z0-9*]/]}
 ]
   , ParserStart: "CG"
 }

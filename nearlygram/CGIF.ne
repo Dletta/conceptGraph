@@ -19,5 +19,5 @@ Arc        -> ("?" Letter) {% (d)=> d[0].join('')%}
 Label      -> Letter:+ {% (d)=> d[0].join('')%}
 Referent   -> Mixed:+  {% (d)=> d[0].join('')%}
 Letter     -> [ a-zA-Z]
-Mixed      -> [ a-zA-Z0-9]
+Mixed      -> [ a-zA-Z0-9*]
 #add support for rules
