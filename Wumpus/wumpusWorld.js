@@ -185,10 +185,17 @@ var testCanon = new axiomStore('test Canon');
 var testSchema = parse('Test Person ::[Person:**x](has?x?y)[Name:**y]');
 testCanon.add(testSchema);
 
+var testNeg = new axiomStore('test Negation');
+var twohead = parse('NoPersonHasTwoHeads::[Person:**x](has?x?y)[Head:**y](has?x?z)[Head:**z]');
+testNeg.add(twohead);
+
 var perJohn = parse('John ::[Person:John*x]');
 
 
-testWorld.init(perJohn, testCanon, law, neg);
+testWorld.init(perJohn, testCanon, law, testNeg);
 testWorld.tell(perJohn);
 
-testWorld.tell(parse('JohnsName is John::[Person:John*x](has?x?y)[Name:John*y]')); //will not work, as it does not 'add new Information' currently
+var johnName = parse('JohnsName is John::[Person:John*x](has?x?y)[Name:John*y]');
+testWorld.tell(johnName); //will not work, as it does not 'add new Information' currently
+var bethelbrox = parse('Bethelbrox::[Person:Bethelbrox*x](has?x?y)[Head:Bel*y](has?x?z)[Head:Brox*z]');
+testWorld.tell(bethelbrox);
