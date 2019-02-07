@@ -78,16 +78,16 @@ neg.add(born2);
 
 var tinmanA = parse("tinmanBornInOz::[Person:Tinman*x](object?x?y)[Born*y](location?y?z)[Country:Oz*z]");
 
-world.init(tinmanA, canon, law, neg);
+//world.init(tinmanA, canon, law, neg);
 
-world.tell(tinmanA);
+//world.tell(tinmanA);
 
 var alice = parse("dorothyBornInUSA::[Person:Dorothy*x](object?x?y)[Born*y](location?y?z)[Country:USA*z]");
-world.tell(alice);
+//world.tell(alice);
 
 
 var alice2 = parse("dorothyBornInOz::[Person:Dorothy*x](object?x?y)[Born*y](location?y?z)[Country:Oz*z]");
-world.tell(alice2);
+//world.tell(alice2);
 
 //*/
 
@@ -192,10 +192,19 @@ testNeg.add(twohead);
 var perJohn = parse('John ::[Person:John*x]');
 
 
-testWorld.init(perJohn, testCanon, law, testNeg);
-testWorld.tell(perJohn);
+//testWorld.init(perJohn, testCanon, law, testNeg);
+//testWorld.tell(perJohn);
 
 var johnName = parse('JohnsName is John::[Person:John*x](has?x?y)[Name:John*y]');
-testWorld.tell(johnName); //will not work, as it does not 'add new Information' currently
+//testWorld.tell(johnName); //will not work, as it does not 'add new Information' currently
 var bethelbrox = parse('Bethelbrox::[Person:Bethelbrox*x](has?x?y)[Head:Bel*y](has?x?z)[Head:Brox*z]');
-testWorld.tell(bethelbrox);
+//testWorld.tell(bethelbrox);
+
+var testReason = new Reasoner();
+var necT = new axiomStore('necessarilyTrue');
+var posT = new axiomStore('possiblyTrue');
+posT.add(testSchema);
+testReason.init(necT, posT, law, testNeg);
+console.log(testReason.tell(perJohn));
+console.log(testReason.tell(johnName));
+console.log(testReason.tell(bethelbrox));
