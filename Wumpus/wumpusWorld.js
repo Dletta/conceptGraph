@@ -200,7 +200,7 @@ var johnName = parse('JohnsName is John::[Person:John*x](has?x?y)[Name:John*y]')
 var bethelbrox = parse('Bethelbrox::[Person:Bethelbrox*x](has?x?y)[Head:Bel*y](has?x?z)[Head:Brox*z]');
 //testWorld.tell(bethelbrox);
 
-var testReason = new Reasoner();
+var testReason = new Reasoner(eventS);
 var necT = new axiomStore('necessarilyTrue');
 var posT = new axiomStore('possiblyTrue');
 posT.add(testSchema);
