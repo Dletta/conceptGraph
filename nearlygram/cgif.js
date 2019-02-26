@@ -18,7 +18,10 @@ var grammar = {
     {"name": "Concept$ebnf$1$subexpression$1", "symbols": [{"literal":":"}, "Referent"]},
     {"name": "Concept$ebnf$1", "symbols": ["Concept$ebnf$1$subexpression$1"], "postprocess": id},
     {"name": "Concept$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
-    {"name": "Concept", "symbols": [{"literal":"["}, "Label", "Concept$ebnf$1", "identifier", {"literal":"]"}], "postprocess":  function(d){
+    {"name": "Concept$ebnf$2$subexpression$1", "symbols": [{"literal":"("}, "Val", {"literal":")"}]},
+    {"name": "Concept$ebnf$2", "symbols": ["Concept$ebnf$2$subexpression$1"], "postprocess": id},
+    {"name": "Concept$ebnf$2", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "Concept", "symbols": [{"literal":"["}, "Label", "Concept$ebnf$1", "identifier", "Concept$ebnf$2", {"literal":"]"}], "postprocess":  function(d){
         var con = {};
         con.label = d[1];
         con.type = 'concept';
@@ -26,6 +29,9 @@ var grammar = {
           con.ref = d[2][1];
         }
         con.identifier = d[3];
+        if(d[4]){
+          con.fuzzy = parseFloat(d[4][1]);
+        }
         return con;
         }},
     {"name": "identifier$subexpression$1", "symbols": [{"literal":"*"}, "Letter"]},
@@ -43,8 +49,12 @@ var grammar = {
     {"name": "Referent$ebnf$1", "symbols": ["Mixed"]},
     {"name": "Referent$ebnf$1", "symbols": ["Referent$ebnf$1", "Mixed"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "Referent", "symbols": ["Referent$ebnf$1"], "postprocess": (d)=> d[0].join('')},
+    {"name": "Val$ebnf$1", "symbols": ["Fuzzy"]},
+    {"name": "Val$ebnf$1", "symbols": ["Val$ebnf$1", "Fuzzy"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "Val", "symbols": ["Val$ebnf$1"], "postprocess": (d)=> d[0].join('')},
     {"name": "Letter", "symbols": [/[ a-zA-Z]/]},
-    {"name": "Mixed", "symbols": [/[ a-zA-Z0-9*]/]}
+    {"name": "Mixed", "symbols": [/[ a-zA-Z0-9*]/]},
+    {"name": "Fuzzy", "symbols": [/[.0-9*]/]}
 ]
   , ParserStart: "CG"
 }
