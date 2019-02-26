@@ -22,7 +22,6 @@ function deepCompare (graph1, graph2) {
       }
     }
   }
-
   return result;
 }
 
@@ -36,5 +35,19 @@ function deepCompare (graph1, graph2) {
 *   If the player falls into a pit or ends up in the same room with the Wumpus, he dies.
 */
 
-var initialGraph = parse("Initial::[Player:You*x(1.0)](location?x?y)[Room:03*y(1.0)](pTime?a?y)[Time:0*a(1.0)](state?y?z)[Safe:Yes*z(1.0)]")
+var initialGraph = parse("Initial::[Player:You*x(1.0)](location?x?y)[Room:03*y(1.0)](pTime?a?y)[Time:0*a(1.0)](percept?a?b)[Breeze:False*b(0.0)](state?y?z)[Safe:Yes*z(1.0)]")
 translate(initialGraph)
+
+var notAPit = parse("Not a Pit::[Player:You*x(1.0)](location?x?y)[Room:**y](pTime?a?y)[Time:**a](percept?a?b)[Breeze:False*b(0.0)]")
+translate(notAPit);
+
+var wump = new Reasoner(eventS);
+wump.eventS.sub('unify', wump.unify.bind(wump));
+
+var notAPitCon = parse("Not A Pit Conclusion::[Player:You*x(1.0)](location?x?y)[Room:**y](adjacent?y?z)[Room:**z](be?z?a)[Pit:Ahh*z(-1.0)]")
+notAPit.setCon(notAPitCon)
+
+wump.law.add(notAPit);
+
+wump.assert(initialGraph)
+console.log(wump.tell(initialGraph));

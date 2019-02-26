@@ -26,7 +26,7 @@ var grammar = {
         con.label = d[1];
         con.type = 'concept';
         if(d[2]){
-          con.ref = d[2][1];
+          con.referent = d[2][1];
         }
         con.identifier = d[3];
         if(d[4]){
@@ -54,7 +54,7 @@ var grammar = {
     {"name": "Val", "symbols": ["Val$ebnf$1"], "postprocess": (d)=> d[0].join('')},
     {"name": "Letter", "symbols": [/[ a-zA-Z]/]},
     {"name": "Mixed", "symbols": [/[ a-zA-Z0-9*]/]},
-    {"name": "Fuzzy", "symbols": [/[.0-9*]/]}
+    {"name": "Fuzzy", "symbols": [/[+-.0-9*]/]}
 ]
   , ParserStart: "CG"
 }

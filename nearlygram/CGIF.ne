@@ -6,7 +6,7 @@ Concept    -> "["  Label  (":"  Referent):?  identifier ("(" Val ")"):? "]" {% f
   con.label = d[1];
   con.type = 'concept';
   if(d[2]){
-    con.ref = d[2][1];
+    con.referent = d[2][1];
   }
   con.identifier = d[3];
   if(d[4]){
@@ -24,5 +24,5 @@ Referent   -> Mixed:+  {% (d)=> d[0].join('')%}
 Val        -> Fuzzy:+ {% (d)=> d[0].join('')%}
 Letter     -> [ a-zA-Z]
 Mixed      -> [ a-zA-Z0-9*]
-Fuzzy      -> [.0-9*]
+Fuzzy      -> [+-.0-9*]
 #add support for rules
