@@ -44,10 +44,11 @@ translate(notAPit);
 var wump = new Reasoner(eventS);
 wump.eventS.sub('unify', wump.unify.bind(wump));
 
-var notAPitCon = parse("Not A Pit Conclusion::[Player:You*x(1.0)](location?x?y)[Room:**y](adjacent?y?z)[Room:**z](be?z?a)[Pit:Ahh*z(-1.0)]")
-notAPit.setCon(notAPitCon)
+var notAPitCon = parse("Not A Pit Conclusion::[Player:You*x(1.0)](location?x?y)[Room:**y](adjacent?y?z)[Room:**z](be?z?a)[Pit:Ahh*a(-1.0)]")
+notAPit.setCon(notAPitCon, wump)
 
 wump.law.add(notAPit);
 
-wump.assert(initialGraph)
+//wump.assert(initialGraph)
 console.log(wump.tell(initialGraph));
+wump.util.projection(initialGraph, wump.law.axioms[0], true);
