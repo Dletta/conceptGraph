@@ -36,10 +36,8 @@ function deepCompare (graph1, graph2) {
 */
 
 var initialGraph = parse("Initial::[Player:You*x(1.0)](location?x?y)[Room:03*y(1.0)](pTime?a?y)[Time:0*a(1.0)](percept?a?b)[Breeze:False*b(0.0)](state?y?z)[Safe:Yes*z(1.0)]")
-translate(initialGraph)
 
 var notAPit = parse("Not a Pit::[Player:You*x(1.0)](location?x?y)[Room:**y](pTime?a?y)[Time:**a](percept?a?b)[Breeze:False*b(0.0)]")
-translate(notAPit);
 
 var wump = new Reasoner(eventS);
 wump.eventS.sub('unify', wump.unify.bind(wump));
@@ -51,4 +49,3 @@ wump.law.add(notAPit);
 
 //wump.assert(initialGraph)
 console.log(wump.tell(initialGraph));
-wump.util.projection(initialGraph, wump.law.axioms[0], true);
