@@ -46,6 +46,12 @@ var world3 = parse("WorldThree::[Room:01*x(1.0)](adjacent?x?y)[Room:00*y(1.0)](a
 wump.assert(world3)
 var world4 = parse("WorldFour::[Room:03*x(1.0)](adjacent?x?y)[Room:13*y(1.0)](adjacent?y?x)")
 wump.assert(world4)
+var world5 = parse("WorldFive::[Room:13*x(1.0)](adjacent?x?y)[Room:12*y(1.0)](adjacent?y?x)")
+wump.assert(world5)
+var world6 = parse("WorldSix::[Room:12*x(1.0)](adjacent?x?y)[Room:11*y(1.0)](adjacent?y?x)")
+wump.assert(world6)
+var world7 = parse("WorldSeven::[Room:11*x(1.0)](adjacent?x?y)[Room:10*y(1.0)](adjacent?y?x)")
+wump.assert(world7)
 
 var initialGraph = parse("Initial::[Player:You*x(1.0)](location?x?y)[Room:03*y(1.0)](pTime?a?y)[Time:0*a(1.0)](percept?a?b)[Breeze:False*b(0.0)](state?y?z)[Safe:Yes*z(1.0)]")
 
@@ -58,3 +64,65 @@ wump.law.add(notAPit);
 
 //wump.assert(initialGraph)
 console.log(wump.tell(initialGraph));
+
+
+// traversal to build a nice graph viz
+
+function exhausted(node,edges,opt) {
+  var temp;
+  var arr = Object.keys(node);
+  var i = 0;
+  var l = arr.length;
+  for(;i<l;i++){
+    if(typeof(node[arr[i]]) !== 'string' && node[arr[i]].name){
+      if(!edges.has(node.name+arr[i])){
+        var temp = arr[i];
+        break;
+      }
+    }
+  }
+  if(!opt) {
+    if(temp){
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    if(temp){
+      return temp;
+    }
+  }
+};
+
+function explore(graph, cb, node, key) {
+  var stack = [];
+  var nodes = new Map();
+  var edges = new Map();
+  nodes.set(node.name, {id:node.name});
+  var start = node;
+  var u = node;
+  stack.push(u)
+  do{
+    while(!exhausted(u, edges)){
+      var edge = exhausted(u, edges, true);
+      var v = u[edge];
+      nodes.set(v.name, {id:v.name});
+      edges.set(u.name+v.name, {source:u.name,target:v.name})
+      stack.push(v)
+      u = v;
+    }
+    var y = u;
+    while(!(stack.length==0)){
+      y = stack.pop();
+      if(!exhausted(y,edges)){
+        stack.push(y)
+        u = y;
+        break;
+      }
+    }
+  }while(!(stack.length==0))
+  console.log('done');
+  graph.nodes = makeNodes(nodes);
+  graph.edges = makeEdges(edges);
+  cb();
+};
